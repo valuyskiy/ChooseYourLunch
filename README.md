@@ -1,7 +1,7 @@
 # ChooseYourLunch
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/cc4dc3c9b6054b19be5f768cd0f265f3)](https://www.codacy.com/app/valuyskiy/ChooseYourLunch?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=valuyskiy/ChooseYourLunch&amp;utm_campaign=Badge_Grade)
 [![Dependency Status](https://www.versioneye.com/user/projects/5ab8135e0fb24f44b0619797/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/5ab8135e0fb24f44b0619797)
-
+[![Build Status](https://travis-ci.org/valuyskiy/ChooseYourLunch.svg?branch=master)](https://travis-ci.org/valuyskiy/ChooseYourLunch)
 
 ##A voting system for deciding where to have lunch.
 
