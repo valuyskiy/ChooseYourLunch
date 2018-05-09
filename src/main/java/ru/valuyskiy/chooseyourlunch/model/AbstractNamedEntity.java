@@ -10,6 +10,11 @@ public abstract class AbstractNamedEntity extends AbstractBaseEntity {
     public AbstractNamedEntity() {
     }
 
+    public AbstractNamedEntity(String name) {
+        super(null);
+        this.name = name;
+    }
+
     public AbstractNamedEntity(Integer id, String name) {
         super(id);
         this.name = name;
