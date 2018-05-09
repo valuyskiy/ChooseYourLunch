@@ -10,7 +10,7 @@ import ru.valuyskiy.chooseyourlunch.util.exception.NotFoundException;
 import java.util.List;
 
 @Service("userService")
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements BaseCrudService<User>, UserService {
 
     @Autowired
     private UserRepository repository;
