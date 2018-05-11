@@ -4,7 +4,6 @@ import org.hibernate.Hibernate;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @MappedSuperclass
 @Access(AccessType.FIELD)

@@ -44,6 +44,10 @@ public class User extends AbstractNamedEntity {
         setRoles(roles);
     }
 
+    public User(Integer id, String name, String email, String password, Role role, Role... roles) {
+        this(id, name, email, password, EnumSet.of(role, roles));
+    }
+
     public String getEmail() {
         return email;
     }

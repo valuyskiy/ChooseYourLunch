@@ -11,18 +11,21 @@ import java.time.LocalDate;
 @Table(name = "menu")
 public class Menu extends AbstractBaseEntity {
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
     private Restaurant restaurant;
 
-    @Column(name = "date", nullable = false)
+    @Column(name = "date", columnDefinition = "date default now()")
     @NotNull
-    private LocalDate date;
+    private LocalDate date = LocalDate.now();
 
     public Menu() {
+    }
+
+    public Menu(Restaurant restaurant){
+        this.restaurant = restaurant;
     }
 
     public Menu(Restaurant restaurant, LocalDate date) {
@@ -33,7 +36,7 @@ public class Menu extends AbstractBaseEntity {
     @Override
     public String toString() {
         return "Menu{" +
-                "restaurant=" + restaurant +
+                "restaurant ID = " + restaurant.getId()+
                 ", date=" + date +
                 ", id=" + id +
                 '}';
