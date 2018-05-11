@@ -2,35 +2,35 @@ package ru.valuyskiy.chooseyourlunch.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.valuyskiy.chooseyourlunch.model.Vote;
-import ru.valuyskiy.chooseyourlunch.repository.VoteRepository;
+import ru.valuyskiy.chooseyourlunch.model.Dish;
+import ru.valuyskiy.chooseyourlunch.repository.DishRepository;
 import ru.valuyskiy.chooseyourlunch.util.exception.NotFoundException;
 
 import java.util.List;
 
-@Service("voteService")
-public class VoteServiceImpl implements VoteService{
+@Service("dishesService")
+public class DishServiceImpl implements DishService{
 
     @Autowired
-    VoteRepository repository;
+    DishRepository repository;
 
     @Override
-    public Vote create(Vote vote) {
+    public Dish create(Dish dish) {
         return null;
     }
 
     @Override
-    public Vote get(int id) throws NotFoundException {
+    public Dish get(int id) throws NotFoundException {
         return null;
     }
 
     @Override
-    public List<Vote> getAll() {
+    public List<Dish> getAll() {
         return null;
     }
 
     @Override
-    public void update(Vote vote) {
+    public void update(Dish dish) {
 
     }
 

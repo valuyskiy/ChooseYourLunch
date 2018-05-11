@@ -1,6 +1,7 @@
 package ru.valuyskiy.chooseyourlunch.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import ru.valuyskiy.chooseyourlunch.model.User;
@@ -9,40 +10,40 @@ import ru.valuyskiy.chooseyourlunch.util.exception.NotFoundException;
 
 import java.util.List;
 
+import static ru.valuyskiy.chooseyourlunch.util.ValidationUtil.checkNotFoundWithId;
+
 @Service("userService")
 public class UserServiceImpl implements BaseCrudService<User>, UserService {
+
+    private static final Sort SORT_NAME_EMAIL = new Sort(Sort.Direction.ASC, "name", "email");
 
     @Autowired
     private UserRepository repository;
 
     @Override
-    public User get(int id) {
-        return repository.findById(id).orElse(null);
-    }
-
-    @Override
-    public User getByEmail(String email) throws NotFoundException {
-        return null;
-    }
-
-    @Override
-    public void update(User user) {
-    }
-
-    @Override
     public User create(User user) {
-        Assert.notNull(user, "user must not be null");
+        Assert.notNull(user, "User must not be null");
         return repository.save(user);
     }
 
     @Override
-    public void delete(int id) {
-        repository.deleteById(id);
+    public User get(int id) throws NotFoundException {
+        return checkNotFoundWithId(repository.findById(id).orElse(null), id);
     }
 
     @Override
     public List<User> getAll() {
-        return repository.findAll();
+        return repository.findAll(SORT_NAME_EMAIL);
     }
 
+    @Override
+    public void update(User user) {
+        Assert.notNull(user, "User must not be null");
+        checkNotFoundWithId(repository.save(user), user.getId());
+    }
+
+    @Override
+    public void delete(int id) {
+        checkNotFoundWithId(repository.delete(id) != 0, id);
+    }
 }

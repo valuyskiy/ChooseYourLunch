@@ -1,6 +1,7 @@
 package ru.valuyskiy.chooseyourlunch.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import ru.valuyskiy.chooseyourlunch.model.Restaurant;
@@ -9,36 +10,40 @@ import ru.valuyskiy.chooseyourlunch.util.exception.NotFoundException;
 
 import java.util.List;
 
+import static ru.valuyskiy.chooseyourlunch.util.ValidationUtil.checkNotFoundWithId;
+
 @Service("restaurantService")
-public class RestaurantServiceImpl implements BaseCrudService<Restaurant> {
+public class RestaurantServiceImpl implements RestaurantService {
+
+    private static final Sort SORT_NAME = new Sort(Sort.Direction.ASC, "name");
 
     @Autowired
-    RestaurantRepository repository;
+    private RestaurantRepository repository;
 
     @Override
     public Restaurant create(Restaurant restaurant) {
-        Assert.notNull(restaurant, "user must not be null");
+        Assert.notNull(restaurant, "Restaurant must not be null");
         return repository.save(restaurant);
+    }
+
+    @Override
+    public Restaurant get(int id) throws NotFoundException {
+        return checkNotFoundWithId(repository.findById(id).orElse(null), id);
+    }
+
+    @Override
+    public List<Restaurant> getAll() {
+        return repository.findAll(SORT_NAME);
+    }
+
+    @Override
+    public void update(Restaurant restaurant) {
+        Assert.notNull(restaurant, "Restaurant must not be null");
+        checkNotFoundWithId(repository.save(restaurant), restaurant.getId());
     }
 
     @Override
     public void delete(int id) throws NotFoundException {
         repository.deleteById(id);
-    }
-
-    @Override
-    public Restaurant get(int id) throws NotFoundException {
-        return repository.findById(id).orElse(null);
-    }
-
-    @Override
-    public void update(Restaurant restaurant) {
-        Assert.notNull(restaurant, "user must not be null");
-        repository.save(restaurant);
-    }
-
-    @Override
-    public List<Restaurant> getAll() {
-        return repository.findAll();
     }
 }

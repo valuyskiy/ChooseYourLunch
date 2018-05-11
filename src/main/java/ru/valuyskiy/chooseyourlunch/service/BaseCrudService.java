@@ -8,12 +8,12 @@ public interface BaseCrudService<T> {
 
     T create(T t);
 
-    void delete(int id) throws NotFoundException;
-
     T get(int id) throws NotFoundException;
+
+    List<T> getAll();
 
     void update(T t);
 
-    List<T> getAll();
+    void delete(int id) throws NotFoundException;
 
 }
