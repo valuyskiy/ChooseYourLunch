@@ -5,5 +5,5 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.valuyskiy.chooseyourlunch.model.Dish;
 
 @Transactional(readOnly = true)
-public interface DishesRepository extends JpaRepository<Dish, Integer> {
+public interface DishRepository extends JpaRepository<Dish, Integer> {
 }
