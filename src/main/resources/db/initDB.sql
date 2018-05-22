@@ -1,10 +1,9 @@
-DROP TABLE IF EXISTS vote;
+DROP TABLE IF EXISTS voting;
 DROP TABLE IF EXISTS dishes;
 DROP TABLE IF EXISTS menu;
 DROP TABLE IF EXISTS restaurants;
 DROP TABLE IF EXISTS user_roles;
 DROP TABLE IF EXISTS users;
-
 
 DROP SEQUENCE IF EXISTS global_seq;
 CREATE SEQUENCE global_seq START 100000;
@@ -51,11 +50,11 @@ CREATE TABLE dishes(
 CREATE UNIQUE INDEX dishes_unique_menu_name_idx ON dishes (menu_id, name);
 
 
-CREATE TABLE vote(
+CREATE TABLE voting(
   id              INTEGER PRIMARY KEY DEFAULT nextval('global_seq'),
   menu_id         INTEGER                 NOT NULL,
   user_id         INTEGER                 NOT NULL,
   FOREIGN KEY (menu_id) REFERENCES public.menu (id) MATCH FULL ON DELETE CASCADE,
   FOREIGN KEY (user_id) REFERENCES public.users (id) MATCH FULL ON DELETE CASCADE
 );
-CREATE UNIQUE INDEX vote_unique_menu_user_idx ON vote (menu_id, user_id);
+CREATE UNIQUE INDEX voting_unique_menu_user_idx ON voting (menu_id, user_id);

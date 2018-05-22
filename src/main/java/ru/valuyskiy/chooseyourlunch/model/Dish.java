@@ -8,7 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "dishes")
+@Table(name = "dishes", uniqueConstraints = @UniqueConstraint(columnNames = {"menu_id", "name"}, name = "dishes_unique_menu_name_idx"))
 public class Dish extends AbstractNamedEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)

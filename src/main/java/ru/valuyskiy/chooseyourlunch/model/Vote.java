@@ -3,13 +3,11 @@ package ru.valuyskiy.chooseyourlunch.model;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
+@Table(name = "voting", uniqueConstraints = @UniqueConstraint(columnNames = {"menu_id", "user_id"}, name = "voting_unique_menu_user_idx"))
 public class Vote extends AbstractBaseEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)

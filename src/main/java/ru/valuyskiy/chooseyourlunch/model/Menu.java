@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "menu")
+@Table(name = "menu", uniqueConstraints = @UniqueConstraint(columnNames = {"restaurant_id", "date"}, name = "menu_unique_restaurant_date_idx"))
 public class Menu extends AbstractBaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
