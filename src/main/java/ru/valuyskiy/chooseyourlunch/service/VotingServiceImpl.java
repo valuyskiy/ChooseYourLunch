@@ -9,6 +9,8 @@ import ru.valuyskiy.chooseyourlunch.util.exception.NotFoundException;
 
 import java.util.List;
 
+import static ru.valuyskiy.chooseyourlunch.util.ValidationUtil.checkNotFoundWithId;
+
 @Service("voteService")
 public class VotingServiceImpl implements VotingService {
 
@@ -23,21 +25,22 @@ public class VotingServiceImpl implements VotingService {
 
     @Override
     public Vote get(int id) throws NotFoundException {
-        return null;
+        return checkNotFoundWithId(repository.findById(id).orElse(null), id);
     }
 
     @Override
     public List<Vote> getAll() {
-        return null;
+        return repository.findAll();
     }
 
     @Override
     public void update(Vote vote) {
-
+        Assert.notNull(vote, "Vote must not be null");
+        checkNotFoundWithId(repository.save(vote), vote.getId());
     }
 
     @Override
     public void delete(int id) throws NotFoundException {
-
+        checkNotFoundWithId(repository.delete(id) != 0, id);
     }
 }

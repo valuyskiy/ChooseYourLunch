@@ -44,6 +44,6 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public void delete(int id) throws NotFoundException {
-        repository.deleteById(id);
+        checkNotFoundWithId(repository.delete(id) != 0, id);
     }
 }

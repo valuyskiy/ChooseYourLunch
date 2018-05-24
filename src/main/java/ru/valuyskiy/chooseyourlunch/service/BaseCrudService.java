@@ -4,6 +4,8 @@ import ru.valuyskiy.chooseyourlunch.util.exception.NotFoundException;
 
 import java.util.List;
 
+import static ru.valuyskiy.chooseyourlunch.util.ValidationUtil.checkNotFoundWithId;
+
 public interface BaseCrudService<T> {
 
     T create(T t);

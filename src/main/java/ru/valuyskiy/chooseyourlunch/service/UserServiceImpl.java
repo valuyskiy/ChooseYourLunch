@@ -10,6 +10,7 @@ import ru.valuyskiy.chooseyourlunch.util.exception.NotFoundException;
 
 import java.util.List;
 
+import static ru.valuyskiy.chooseyourlunch.util.ValidationUtil.checkNotFound;
 import static ru.valuyskiy.chooseyourlunch.util.ValidationUtil.checkNotFoundWithId;
 
 @Service("userService")
@@ -45,5 +46,11 @@ public class UserServiceImpl implements BaseCrudService<User>, UserService {
     @Override
     public void delete(int id) {
         checkNotFoundWithId(repository.delete(id) != 0, id);
+    }
+
+    public User getByEmail(String email){
+        Assert.notNull(email, "E-mail must not be null");
+        return checkNotFound(repository.getByEmail(email), "email=" + email);
+
     }
 }
