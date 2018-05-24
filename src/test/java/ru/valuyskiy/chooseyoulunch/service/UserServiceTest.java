@@ -30,17 +30,22 @@ public class UserServiceTest extends AbstractServiceTest {
 
     @Test
     public void getByEmail() {
+        User user = service.getByEmail("admin@gmail.com");
+        assertMatch(user, ADMIN);
     }
 
     @Test
     public void update() {
+        User updated = getUpdated();
+        service.update(updated);
+        assertMatch(service.get(USER_ID), updated);
     }
 
     @Test
     public void create() {
-        User newUser = new User(null, "New", "new@gmail.com", "newPass", Role.ROLE_USER);
+        User newUser = getCreated();
         User created = service.create(newUser);
-        assertMatch(service.getAll(), ADMIN, USER, newUser);
+        assertMatch(service.getAll(), ADMIN, newUser, USER);
     }
 
     @Test(expected = DataAccessException.class)
@@ -61,7 +66,7 @@ public class UserServiceTest extends AbstractServiceTest {
 
     @Test
     public void getAll() {
-        List<User> user = service.getAll();
-        assertMatch(user, ADMIN, USER);
+        List<User> users = service.getAll();
+        assertMatch(users, ADMIN, USER);
     }
 }
