@@ -3,7 +3,7 @@ package ru.valuyskiy.chooseyoulunch.service;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.valuyskiy.chooseyourlunch.model.Menu;
-import ru.valuyskiy.chooseyourlunch.service.MenuServiceImpl;
+import ru.valuyskiy.chooseyourlunch.service.MenuService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
 public class MenuServiceTest extends AbstractServiceTest {
 
     @Autowired
-    protected MenuServiceImpl menuService;
+    protected MenuService menuService;
 
     @Test
     public void getByRestaurant() {

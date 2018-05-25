@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import ru.valuyskiy.chooseyourlunch.model.Role;
 import ru.valuyskiy.chooseyourlunch.model.User;
-import ru.valuyskiy.chooseyourlunch.service.UserServiceImpl;
+import ru.valuyskiy.chooseyourlunch.service.UserService;
 import ru.valuyskiy.chooseyourlunch.util.exception.NotFoundException;
 
 import java.util.List;
@@ -15,7 +15,7 @@ import static ru.valuyskiy.chooseyoulunch.UserTestData.*;
 public class UserServiceTest extends AbstractServiceTest {
 
     @Autowired
-    protected UserServiceImpl service;
+    protected UserService service;
 
     @Test
     public void get() {

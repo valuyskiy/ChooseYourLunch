@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.valuyskiy.chooseyoulunch.RestaurantTestData;
 import ru.valuyskiy.chooseyourlunch.model.Restaurant;
-import ru.valuyskiy.chooseyourlunch.service.RestaurantServiceImpl;
+import ru.valuyskiy.chooseyourlunch.service.RestaurantService;
 import ru.valuyskiy.chooseyourlunch.util.exception.NotFoundException;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import static ru.valuyskiy.chooseyoulunch.RestaurantTestData.*;
 public class RestaurantServiceTest extends AbstractServiceTest {
 
     @Autowired
-    protected RestaurantServiceImpl service;
+    protected RestaurantService service;
 
     @Test
     public void get() {
