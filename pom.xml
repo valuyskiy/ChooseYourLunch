@@ -20,6 +20,7 @@
         <tomcat.version>8.5.29</tomcat.version>
         <spring.version>5.0.4.RELEASE</spring.version>
         <spring-data-jpa.version>2.0.5.RELEASE</spring-data-jpa.version>
+        <jackson-json.version>2.9.5</jackson-json.version>
 
         <!-- Hibernate -->
         <hibernate.version>5.2.16.Final</hibernate.version>
@@ -133,7 +134,22 @@
             <version>${postgresql.version}</version>
         </dependency>
 
-
+        <!--JSON-->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson-json.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-hibernate5</artifactId>
+            <version>${jackson-json.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>${jackson-json.version}</version>
+        </dependency>
 
         <!--Test-->
         <dependency>
