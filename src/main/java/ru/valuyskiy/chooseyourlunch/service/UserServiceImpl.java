@@ -1,6 +1,8 @@
 package ru.valuyskiy.chooseyourlunch.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -21,6 +23,8 @@ public class UserServiceImpl implements BaseCrudService<User>, UserService {
     @Autowired
     private UserRepository repository;
 
+    // TODO Configure cache
+    @CacheEvict(value = "users", allEntries = true)
     @Override
     public User create(User user) {
         Assert.notNull(user, "User must not be null");
@@ -32,11 +36,13 @@ public class UserServiceImpl implements BaseCrudService<User>, UserService {
         return checkNotFoundWithId(repository.findById(id).orElse(null), id);
     }
 
+    @Cacheable("users")
     @Override
     public List<User> getAll() {
         return repository.findAll(SORT_NAME_EMAIL);
     }
 
+    @CacheEvict(value = "users", allEntries = true)
     @Override
     public void update(User user) {
         Assert.notNull(user, "User must not be null");
