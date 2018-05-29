@@ -8,8 +8,8 @@ DELETE FROM users;
 ALTER SEQUENCE global_seq RESTART WITH 100050;
 
 INSERT INTO users (id, name, email, password) VALUES
-  (100000,'Admin', 'admin@gmail.com', 'adminPassword'),
-  (100001,'User', 'user@google.ru', 'userPassword');
+  (100000,'Admin', 'admin@gmail.com', '{noop}adminPassword'),
+  (100001,'User', 'user@google.ru', '{noop}userPassword');
 
 INSERT INTO user_roles (role, user_id) VALUES
   ('ROLE_ADMIN', 100000),
@@ -30,7 +30,7 @@ INSERT INTO menu (id, date, restaurant_id) VALUES
 
 INSERT INTO dishes (id, name, price, menu_id) VALUES
   (100005, 'Сладкие томаты с крымским луком', 69000, 100004),
-  (100006, 'Устрица "Дальневосточная"', 29000, 100004),
+  (100006, 'Устрица Дальневосточная', 29000, 100004),
   (100007, 'Мидии в сливочном соусе', 89000, 100004),
   (100008, 'Окрошка на квасе', 38000, 100004),
   (100010, 'Свекольный тартар с копченой грудкой цесарки', 48000, 100009),
@@ -38,7 +38,7 @@ INSERT INTO dishes (id, name, price, menu_id) VALUES
   (100012, 'Консоме из курицы с мини пельменями', 45000, 100009),
   (100013, 'Кальмары по-галисийски с запеченными перцами', 75000, 100009),
   (100014, 'Яблочный татин с мороженым из кленового сиропа', 38000, 100009),
-  (100016, 'Тигровые креветка', 99000, 100015),
+  (100016, 'Тигровые креветки', 99000, 100015),
   (100017, 'Тартар из говядины', 138000, 100015),
   (100018, 'Мидии в томатном соусе', 89000, 100015),
   (100019, 'Щавеливый суп', 39000, 100015),
