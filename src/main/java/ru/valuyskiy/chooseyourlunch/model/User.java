@@ -1,5 +1,6 @@
 package ru.valuyskiy.chooseyourlunch.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -28,6 +29,8 @@ public class User extends AbstractNamedEntity {
     @Column(name = "password", nullable = false)
     @NotBlank
     @Size(min = 5, max = 100)
+    // https://stackoverflow.com/a/12505165/548473
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
