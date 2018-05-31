@@ -1,5 +1,6 @@
 package ru.valuyskiy.chooseyourlunch.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -12,7 +13,7 @@ import java.util.List;
 @Table(name = "menu", uniqueConstraints = @UniqueConstraint(columnNames = {"restaurant_id", "date"}, name = "menu_unique_restaurant_date_idx"))
 public class Menu extends AbstractBaseEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
@@ -22,7 +23,7 @@ public class Menu extends AbstractBaseEntity {
     @NotNull
     private LocalDate date = LocalDate.now();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "menu")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "menu")
     private List<Dish> dishes;
 
     public Menu() {
@@ -38,6 +39,11 @@ public class Menu extends AbstractBaseEntity {
         this.date = date;
     }
 
+    public Menu(int id, Restaurant restaurant, LocalDate date) {
+        super(id);
+        this.restaurant = restaurant;
+        this.date = date;
+    }
 
     public Restaurant getRestaurant() {
         return restaurant;
@@ -59,14 +65,10 @@ public class Menu extends AbstractBaseEntity {
         return dishes;
     }
 
-    public void setDishes(List<Dish> dishes) {
-        this.dishes = dishes;
-    }
-
     @Override
     public String toString() {
         return "Menu{" +
-                "restaurant ID = " + restaurant.getId() +
+                "restaurantId=" + restaurant.getId() +
                 ", date=" + date +
                 ", id=" + id +
                 '}';

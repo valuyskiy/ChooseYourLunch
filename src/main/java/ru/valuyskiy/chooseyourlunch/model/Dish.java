@@ -1,5 +1,6 @@
 package ru.valuyskiy.chooseyourlunch.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.Range;
@@ -11,10 +12,12 @@ import javax.validation.constraints.NotNull;
 @Table(name = "dishes", uniqueConstraints = @UniqueConstraint(columnNames = {"menu_id", "name"}, name = "dishes_unique_menu_name_idx"))
 public class Dish extends AbstractNamedEntity {
 
+    // TODO проверить JSON
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Menu menu;
 
     @Column(name = "price", nullable = false)
@@ -27,6 +30,22 @@ public class Dish extends AbstractNamedEntity {
     public Dish(Menu menu, String name, int price) {
         super(name);
         this.menu = menu;
+        this.price = price;
+    }
+
+    public Menu getMenu() {
+        return menu;
+    }
+
+    public void setMenu(Menu menu) {
+        this.menu = menu;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
         this.price = price;
     }
 

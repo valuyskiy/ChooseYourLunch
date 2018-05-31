@@ -2,13 +2,18 @@ package ru.valuyskiy.chooseyourlunch.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.valuyskiy.chooseyourlunch.AuthorizedUser;
 import ru.valuyskiy.chooseyourlunch.model.Menu;
 import ru.valuyskiy.chooseyourlunch.repository.MenuRepository;
+import ru.valuyskiy.chooseyourlunch.repository.VoteRepository;
+import ru.valuyskiy.chooseyourlunch.to.MenuTo;
 import ru.valuyskiy.chooseyourlunch.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
 import static org.springframework.util.Assert.notNull;
 import static ru.valuyskiy.chooseyourlunch.util.ValidationUtil.checkNotFoundWithId;
 
@@ -17,6 +22,9 @@ public class MenuServiceImpl implements MenuService {
 
     @Autowired
     MenuRepository menuRepository;
+
+    @Autowired
+    VoteRepository voteRepository;
 
     @Override
     public Menu create(Menu menu) {
@@ -40,8 +48,33 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public List<Menu> getByDate(LocalDate date) {
-        return menuRepository.getByDate(date);
+    public List<MenuTo> getTo(LocalDate date) {
+        return menuRepository.getByDate(date).stream()
+                .map((m) -> getTo(m.getId()))
+                .collect(toList());
+    }
+
+    @Transactional
+    @Override
+    public MenuTo getTo(int menuId) {
+        Menu menu = get(menuId);
+
+        int totalPrice = menu.getDishes().stream()
+                .mapToInt(d -> d.getPrice())
+                .sum();
+
+        int voteCounter = voteRepository.countByMenu_Id(menu.getId());
+
+        boolean isVoting = voteRepository.countByUser_IdAndMenu_Id(AuthorizedUser.id(), menuId) > 0 ? true : false;
+
+        return new MenuTo(
+                menu.getId(),
+                menu.getDate(),
+                menu.getRestaurant(),
+                menu.getDishes(),
+                voteCounter,
+                isVoting,
+                totalPrice);
     }
 
     @Override
