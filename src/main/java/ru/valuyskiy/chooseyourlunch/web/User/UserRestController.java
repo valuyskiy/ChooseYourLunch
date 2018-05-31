@@ -12,7 +12,7 @@ import ru.valuyskiy.chooseyourlunch.AuthorizedUser;
 import ru.valuyskiy.chooseyourlunch.service.MenuService;
 import ru.valuyskiy.chooseyourlunch.service.UserService;
 import ru.valuyskiy.chooseyourlunch.service.VotingService;
-import ru.valuyskiy.chooseyourlunch.to.MenuTo;
+import ru.valuyskiy.chooseyourlunch.to.MenuToWithDishes;
 import ru.valuyskiy.chooseyourlunch.web.admin.UsersAdminRestController;
 
 import java.time.LocalDate;
@@ -34,7 +34,7 @@ public class UserRestController {
     private UserService userService;
 
     @GetMapping(value = "/menus", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<MenuTo> getTodayMenu(@RequestParam(value = "date", required = false)
+    public List<MenuToWithDishes> getTodayMenu(@RequestParam(value = "date", required = false)
                                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 
         if (date == null) {

@@ -7,7 +7,7 @@ import ru.valuyskiy.chooseyourlunch.AuthorizedUser;
 import ru.valuyskiy.chooseyourlunch.model.Menu;
 import ru.valuyskiy.chooseyourlunch.repository.MenuRepository;
 import ru.valuyskiy.chooseyourlunch.repository.VoteRepository;
-import ru.valuyskiy.chooseyourlunch.to.MenuTo;
+import ru.valuyskiy.chooseyourlunch.to.MenuToWithDishes;
 import ru.valuyskiy.chooseyourlunch.util.exception.NotFoundException;
 
 import java.time.LocalDate;
@@ -48,7 +48,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public List<MenuTo> getTo(LocalDate date) {
+    public List<MenuToWithDishes> getTo(LocalDate date) {
         return menuRepository.getByDate(date).stream()
                 .map((m) -> getTo(m.getId()))
                 .collect(toList());
@@ -56,7 +56,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Transactional
     @Override
-    public MenuTo getTo(int menuId) {
+    public MenuToWithDishes getTo(int menuId) {
         Menu menu = get(menuId);
 
         int totalPrice = menu.getDishes().stream()
@@ -67,7 +67,7 @@ public class MenuServiceImpl implements MenuService {
 
         boolean isVoting = voteRepository.countByUser_IdAndMenu_Id(AuthorizedUser.id(), menuId) > 0 ? true : false;
 
-        return new MenuTo(
+        return new MenuToWithDishes(
                 menu.getId(),
                 menu.getDate(),
                 menu.getRestaurant(),

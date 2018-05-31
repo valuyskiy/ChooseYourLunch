@@ -6,7 +6,7 @@ import ru.valuyskiy.chooseyourlunch.model.Restaurant;
 import java.time.LocalDate;
 import java.util.List;
 
-public class MenuTo extends AbstractTo {
+public class MenuToWithDishes extends AbstractTo {
     private LocalDate date;
     private Restaurant restaurant;
     private List<Dish> dishes;
@@ -16,7 +16,7 @@ public class MenuTo extends AbstractTo {
 
     private int totalPrice;
 
-    public MenuTo(Integer id, LocalDate date, Restaurant restaurant, List<Dish> dishes, int voteCounter, boolean isVoting, int totalPrice) {
+    public MenuToWithDishes(Integer id, LocalDate date, Restaurant restaurant, List<Dish> dishes, int voteCounter, boolean isVoting, int totalPrice) {
         super(id);
         this.date = date;
         this.restaurant = restaurant;
