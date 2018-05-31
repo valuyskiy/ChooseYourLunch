@@ -46,11 +46,6 @@ public class VotingServiceImpl implements VotingService {
     }
 
     @Override
-    public List<Vote> getByMenuId(int menuId) {
-        return voteRepository.getByMenu_Id(menuId);
-    }
-
-    @Override
     public Vote update(Vote vote) {
         Assert.notNull(vote, "Vote must not be null");
         return checkNotFoundWithId(voteRepository.save(vote), vote.getId());
@@ -64,20 +59,21 @@ public class VotingServiceImpl implements VotingService {
     @Override
     public Vote votingById(int menuId) {
 
-        Menu menu = checkNotFoundWithId(menuRepository.findById(menuId).orElse(null), menuId);
+        if (LocalTime.now().isBefore(Vote.votingTime)) {
 
-        int userId = AuthorizedUser.id();
+            Menu menu = checkNotFoundWithId(menuRepository.findById(menuId).orElse(null), menuId);
+            int userId = AuthorizedUser.id();
 
-        Vote vote = voteRepository.getByUser_IdAndDate(userId, LocalDate.now());
+            if (LocalDate.now().equals(menu.getDate())) {
 
-        if (LocalDate.now().equals(menu.getDate()) &&
-                LocalTime.now().isBefore(Vote.votingTime)) {
+                Vote vote = voteRepository.getByUser_IdAndDate(userId, LocalDate.now());
 
-            if (vote == null) {
-                return voteRepository.save(new Vote(userRepository.getOne(userId), LocalDate.now(), menu));
-            } else {
-                vote.setMenu(menu);
-                return voteRepository.save(vote);
+                if (vote == null) {
+                    return voteRepository.save(new Vote(userRepository.getOne(userId), LocalDate.now(), menu));
+                } else {
+                    vote.setMenu(menu);
+                    return voteRepository.save(vote);
+                }
             }
         }
         return null;

@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.valuyskiy.chooseyourlunch.AuthorizedUser;
+import ru.valuyskiy.chooseyourlunch.model.Dish;
 import ru.valuyskiy.chooseyourlunch.model.Menu;
 import ru.valuyskiy.chooseyourlunch.repository.MenuRepository;
+import ru.valuyskiy.chooseyourlunch.repository.RestaurantRepository;
 import ru.valuyskiy.chooseyourlunch.repository.VoteRepository;
 import ru.valuyskiy.chooseyourlunch.to.MenuToWithDishes;
 import ru.valuyskiy.chooseyourlunch.util.exception.NotFoundException;
@@ -26,10 +28,21 @@ public class MenuServiceImpl implements MenuService {
     @Autowired
     VoteRepository voteRepository;
 
+    @Autowired
+    RestaurantRepository restaurantRepository;
+
     @Override
     public Menu create(Menu menu) {
         notNull(menu, "Menu must not be null");
         return menuRepository.save(menu);
+    }
+
+    @Override
+    public Menu createByRestaurantIdAndDate(int restaurantId, LocalDate date) {
+        if (date == null) {
+            date = LocalDate.now();
+        }
+        return create(new Menu(restaurantRepository.getOne(restaurantId), date));
     }
 
     @Override
@@ -49,23 +62,25 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public List<MenuToWithDishes> getTo(LocalDate date) {
-        return menuRepository.getByDate(date).stream()
-                .map((m) -> getTo(m.getId()))
+        if (date == null) {
+            date = LocalDate.now();
+        }
+        return menuRepository.getWithDishesByDate(date).stream()
+                .map(this::getTo)
                 .collect(toList());
     }
 
     @Transactional
     @Override
-    public MenuToWithDishes getTo(int menuId) {
-        Menu menu = get(menuId);
+    public MenuToWithDishes getTo(Menu menu) {
 
         int totalPrice = menu.getDishes().stream()
-                .mapToInt(d -> d.getPrice())
+                .mapToInt(Dish::getPrice)
                 .sum();
 
         int voteCounter = voteRepository.countByMenu_Id(menu.getId());
 
-        boolean isVoting = voteRepository.countByUser_IdAndMenu_Id(AuthorizedUser.id(), menuId) > 0 ? true : false;
+        boolean isVoting = voteRepository.countByUser_IdAndMenu_Id(AuthorizedUser.id(), menu.getId()) > 0;
 
         return new MenuToWithDishes(
                 menu.getId(),
@@ -78,8 +93,8 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public Menu getWithDishesByRestaurantAndDate(int restaurantId, LocalDate date) {
-        return menuRepository.getWithDishesByRestaurantAndDate(restaurantId, date);
+    public List<Menu> getWithDishesByDate(LocalDate date) {
+        return menuRepository.getWithDishesByDate(date);
     }
 
     @Override

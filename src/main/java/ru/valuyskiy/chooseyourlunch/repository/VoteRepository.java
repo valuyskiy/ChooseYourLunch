@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.valuyskiy.chooseyourlunch.model.Vote;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Transactional(readOnly = true)
 public interface VoteRepository extends JpaRepository<Vote, Integer> {
@@ -17,9 +16,6 @@ public interface VoteRepository extends JpaRepository<Vote, Integer> {
     @Modifying
     @Query("DELETE FROM Vote v WHERE v.id=:id")
     int delete(@Param("id") int id);
-
-    // TODO уточнить необходимость метода
-    List<Vote> getByMenu_Id(int menuId);
 
     int countByMenu_Id(int menuId);
 

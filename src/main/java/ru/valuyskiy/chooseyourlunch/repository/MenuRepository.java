@@ -22,9 +22,17 @@ public interface MenuRepository extends JpaRepository<Menu, Integer> {
     @Query("SELECT m FROM Menu m WHERE m.restaurant.id=?1")
     List<Menu> getByRestaurant(int restaurantId);
 
-    List<Menu> getByDate(LocalDate date);
+//    List<Menu> getByDate(LocalDate date);
+//
+//    @EntityGraph(attributePaths = {"dishes"}, type = EntityGraph.EntityGraphType.LOAD)
+//    @Query("SELECT m FROM Menu m WHERE m.restaurant.id=?1 AND m.date=?2")
+//    Menu getWithDishesByRestaurantAndDate(int restaurant, LocalDate date);
 
-    @EntityGraph(attributePaths = {"dishes"}, type = EntityGraph.EntityGraphType.LOAD)
-    @Query("SELECT m FROM Menu m WHERE m.restaurant.id=?1 AND m.date=?2")
-    Menu getWithDishesByRestaurantAndDate(int restaurant, LocalDate date);
+    @EntityGraph(attributePaths = {"dishes", "restaurant"}, type = EntityGraph.EntityGraphType.LOAD)
+    @Query("SELECT m FROM Menu m WHERE m.date=?1")
+    List<Menu> getWithDishesByDate(LocalDate date);
+
+//    @EntityGraph(attributePaths = {"dishes", "restaurant"}, type = EntityGraph.EntityGraphType.LOAD)
+//    @Query("SELECT m FROM Menu m WHERE m.id=?1")
+//    Optional<Menu> getWithDishesById(int id);
 }

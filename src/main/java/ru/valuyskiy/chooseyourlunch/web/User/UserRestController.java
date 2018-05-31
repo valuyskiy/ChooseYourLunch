@@ -5,12 +5,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.valuyskiy.chooseyourlunch.AuthorizedUser;
 import ru.valuyskiy.chooseyourlunch.service.MenuService;
-import ru.valuyskiy.chooseyourlunch.service.UserService;
 import ru.valuyskiy.chooseyourlunch.service.VotingService;
 import ru.valuyskiy.chooseyourlunch.to.MenuToWithDishes;
 import ru.valuyskiy.chooseyourlunch.web.admin.UsersAdminRestController;
@@ -22,7 +20,7 @@ import java.util.List;
 @RequestMapping("/rest/user")
 public class UserRestController {
 
-    protected static final Logger log = LoggerFactory.getLogger(UsersAdminRestController.class);
+    private static final Logger log = LoggerFactory.getLogger(UsersAdminRestController.class);
 
     @Autowired
     private MenuService menuService;
@@ -30,19 +28,11 @@ public class UserRestController {
     @Autowired
     private VotingService votingService;
 
-    @Autowired
-    private UserService userService;
-
-    @GetMapping(value = "/menus", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<MenuToWithDishes> getTodayMenu(@RequestParam(value = "date", required = false)
-                                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-
-        if (date == null) {
-            date = LocalDate.now();
-        }
-
+    @GetMapping(value = "/menus")
+    public List<MenuToWithDishes> get(@RequestParam(value = "date", required = false)
+                                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         log.info("Get all Memus for date {} by user id={}", date, AuthorizedUser.id());
-        return menuService.getTo(date);
+        return menuService.getToWithDishes(date);
     }
 
     @PutMapping(value = "/menus/{id}/votes")
