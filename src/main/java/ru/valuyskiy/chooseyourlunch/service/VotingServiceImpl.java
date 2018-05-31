@@ -51,9 +51,9 @@ public class VotingServiceImpl implements VotingService {
     }
 
     @Override
-    public void update(Vote vote) {
+    public Vote update(Vote vote) {
         Assert.notNull(vote, "Vote must not be null");
-        checkNotFoundWithId(voteRepository.save(vote), vote.getId());
+        return checkNotFoundWithId(voteRepository.save(vote), vote.getId());
     }
 
     @Override

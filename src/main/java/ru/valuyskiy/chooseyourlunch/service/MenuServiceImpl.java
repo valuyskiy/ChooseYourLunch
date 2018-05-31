@@ -83,9 +83,9 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public void update(Menu menu) {
+    public Menu update(Menu menu) {
         notNull(menu, "Menu must not be null");
-        checkNotFoundWithId(menuRepository.save(menu), menu.getId());
+        return checkNotFoundWithId(menuRepository.save(menu), menu.getId());
     }
 
     @Override

@@ -6,7 +6,7 @@ import ru.valuyskiy.chooseyourlunch.to.MenuTo;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface MenuService extends BaseCrudService<Menu>{
+public interface MenuService extends AbstractCrudService<Menu> {
 
     List<Menu> getByRestaurantId(int restaurantId);
 

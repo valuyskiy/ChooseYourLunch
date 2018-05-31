@@ -6,7 +6,7 @@ import java.util.List;
 
 import static ru.valuyskiy.chooseyourlunch.util.ValidationUtil.checkNotFoundWithId;
 
-public interface BaseCrudService<T> {
+public interface AbstractCrudService<T> {
 
     T create(T t);
 
@@ -14,7 +14,7 @@ public interface BaseCrudService<T> {
 
     List<T> getAll();
 
-    void update(T t);
+    T update(T t);
 
     void delete(int id) throws NotFoundException;
 

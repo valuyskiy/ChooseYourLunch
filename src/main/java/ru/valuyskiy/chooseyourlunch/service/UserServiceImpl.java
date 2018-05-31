@@ -20,7 +20,7 @@ import static ru.valuyskiy.chooseyourlunch.util.ValidationUtil.checkNotFound;
 import static ru.valuyskiy.chooseyourlunch.util.ValidationUtil.checkNotFoundWithId;
 
 @Service("userService")
-public class UserServiceImpl implements BaseCrudService<User>, UserService, UserDetailsService {
+public class UserServiceImpl implements AbstractCrudService<User>, UserService, UserDetailsService {
 
     private static final Sort SORT_NAME_EMAIL = new Sort(Sort.Direction.ASC, "name", "email");
 
@@ -48,9 +48,9 @@ public class UserServiceImpl implements BaseCrudService<User>, UserService, User
 
     @CacheEvict(value = "users", allEntries = true)
     @Override
-    public void update(User user) {
+    public User update(User user) {
         Assert.notNull(user, "User must not be null");
-        checkNotFoundWithId(repository.save(user), user.getId());
+        return checkNotFoundWithId(repository.save(user), user.getId());
     }
 
     @Override
