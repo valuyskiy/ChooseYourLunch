@@ -7,16 +7,19 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import ru.valuyskiy.chooseyourlunch.AuthorizedUser;
+import ru.valuyskiy.chooseyourlunch.model.AbstractBaseEntity;
 import ru.valuyskiy.chooseyourlunch.model.User;
 import ru.valuyskiy.chooseyourlunch.repository.UserRepository;
+import ru.valuyskiy.chooseyourlunch.util.exception.ModificationRestrictionException;
 import ru.valuyskiy.chooseyourlunch.util.exception.NotFoundException;
 
 import java.util.List;
 
-import static ru.valuyskiy.chooseyourlunch.util.ValidationUtil.checkNotFound;
 import static ru.valuyskiy.chooseyourlunch.util.ValidationUtil.checkNotFoundWithId;
 
 @Service("userService")
@@ -24,15 +27,21 @@ public class UserServiceImpl implements AbstractCrudService<User>, UserService, 
 
     private static final Sort SORT_NAME_EMAIL = new Sort(Sort.Direction.ASC, "name", "email");
 
+    private final UserRepository repository;
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
-    private UserRepository repository;
+    public UserServiceImpl(UserRepository repository, PasswordEncoder passwordEncoder) {
+        this.repository = repository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     // TODO Configure cache
     @CacheEvict(value = "users", allEntries = true)
     @Override
     public User create(User user) {
         Assert.notNull(user, "User must not be null");
-        return repository.save(user);
+        return repository.save(prepareToSave(user, passwordEncoder));
     }
 
     @Override
@@ -50,17 +59,15 @@ public class UserServiceImpl implements AbstractCrudService<User>, UserService, 
     @Override
     public User update(User user) {
         Assert.notNull(user, "User must not be null");
-        return checkNotFoundWithId(repository.save(user), user.getId());
+        checkModificationAllowed(user.getId());
+        return checkNotFoundWithId(repository.save(prepareToSave(user, passwordEncoder)), user.getId());
     }
 
+    @CacheEvict(value = "users", allEntries = true)
     @Override
     public void delete(int id) {
+        checkModificationAllowed(id);
         checkNotFoundWithId(repository.delete(id) != 0, id);
-    }
-
-    public User getByEmail(String email) {
-        Assert.notNull(email, "E-mail must not be null");
-        return checkNotFound(repository.getByEmail(email), "email=" + email);
     }
 
     @Override
@@ -70,5 +77,18 @@ public class UserServiceImpl implements AbstractCrudService<User>, UserService, 
             throw new UsernameNotFoundException("User " + email + " is not found");
         }
         return new AuthorizedUser(user);
+    }
+
+    private User prepareToSave(User user, PasswordEncoder passwordEncoder) {
+        String password = user.getPassword();
+        user.setPassword(StringUtils.isEmpty(password) ? password : passwordEncoder.encode(password));
+        user.setEmail(user.getEmail().toLowerCase());
+        return user;
+    }
+
+    private void checkModificationAllowed(int id) {
+        if (id == AbstractBaseEntity.START_SEQ) {
+            throw new ModificationRestrictionException();
+        }
     }
 }
