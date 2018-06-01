@@ -9,6 +9,7 @@ import ru.valuyskiy.chooseyourlunch.model.Menu;
 import ru.valuyskiy.chooseyourlunch.repository.MenuRepository;
 import ru.valuyskiy.chooseyourlunch.repository.RestaurantRepository;
 import ru.valuyskiy.chooseyourlunch.repository.VoteRepository;
+import ru.valuyskiy.chooseyourlunch.to.MenuTo;
 import ru.valuyskiy.chooseyourlunch.to.MenuToWithDishes;
 import ru.valuyskiy.chooseyourlunch.util.exception.NotFoundException;
 
@@ -56,23 +57,31 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public List<Menu> getByRestaurantId(int restaurantId) {
-        return menuRepository.getByRestaurant(restaurantId);
+    public List<MenuTo> getToByRestaurantId(int restaurantId) {
+        return menuRepository.getByRestaurant(restaurantId).stream()
+                .map(this::getTo)
+                .collect(toList());
     }
 
     @Override
-    public List<MenuToWithDishes> getTo(LocalDate date) {
+    public MenuTo getTo(Menu menu) {
+        return new MenuTo(menu.getId(), menu.getRestaurant().getId(), menu.getDate());
+    }
+
+
+    @Override
+    public List<MenuToWithDishes> getToWithDishes(LocalDate date) {
         if (date == null) {
             date = LocalDate.now();
         }
         return menuRepository.getWithDishesByDate(date).stream()
-                .map(this::getTo)
+                .map(this::getToWithDishes)
                 .collect(toList());
     }
 
     @Transactional
     @Override
-    public MenuToWithDishes getTo(Menu menu) {
+    public MenuToWithDishes getToWithDishes(Menu menu) {
 
         int totalPrice = menu.getDishes().stream()
                 .mapToInt(Dish::getPrice)
@@ -100,6 +109,16 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public Menu update(Menu menu) {
         notNull(menu, "Menu must not be null");
+        return checkNotFoundWithId(menuRepository.save(menu), menu.getId());
+    }
+
+    @Transactional
+    @Override
+    public Menu update(MenuTo menuTo) {
+        notNull(menuTo, "Menu must not be null");
+        Menu menu = menuRepository.findById(menuTo.getId()).orElse(null);
+        menu.setDate(menuTo.getDate());
+        menu.setRestaurant(restaurantRepository.getOne(menuTo.getRestaurantId()));
         return checkNotFoundWithId(menuRepository.save(menu), menu.getId());
     }
 

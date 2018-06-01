@@ -9,14 +9,17 @@ import java.util.List;
 
 public interface MenuService extends AbstractCrudService<Menu> {
 
-    List<Menu> getByRestaurantId(int restaurantId);
+    List<MenuTo> getToByRestaurantId(int restaurantId);
 
-    List<MenuToWithDishes> getTo(LocalDate date);
+    MenuTo getTo(Menu menu);
 
-    MenuToWithDishes getTo(Menu menu);
+    List<MenuToWithDishes> getToWithDishes(LocalDate date);
+
+    MenuToWithDishes getToWithDishes(Menu menu);
 
     List<Menu> getWithDishesByDate(LocalDate date);
 
     Menu createByRestaurantIdAndDate(int restaurantId, LocalDate date);
 
+    Menu update(MenuTo menuTo);
 }
