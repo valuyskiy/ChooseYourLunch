@@ -57,18 +57,31 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
+    public Menu update(Menu menu) {
+        notNull(menu, "Menu must not be null");
+        return checkNotFoundWithId(menuRepository.save(menu), menu.getId());
+    }
+
+
+    @Override
+    public void delete(int id) throws NotFoundException {
+        checkNotFoundWithId(menuRepository.delete(id) != 0, id);
+    }
+
+
+    @Override
     public List<MenuTo> getToByRestaurantId(int restaurantId) {
         return menuRepository.getByRestaurant(restaurantId).stream()
-                .map(this::getTo)
+                .map(this::toTo)
                 .collect(toList());
     }
 
     @Override
-    public MenuTo getTo(Menu menu) {
+    public MenuTo toTo(Menu menu) {
         return new MenuTo(menu.getId(), menu.getRestaurant().getId(), menu.getDate());
     }
 
-
+    @Transactional
     @Override
     public List<MenuToWithDishes> getToWithDishes(LocalDate date) {
         if (date == null) {
@@ -101,17 +114,6 @@ public class MenuServiceImpl implements MenuService {
                 totalPrice);
     }
 
-    @Override
-    public List<Menu> getWithDishesByDate(LocalDate date) {
-        return menuRepository.getWithDishesByDate(date);
-    }
-
-    @Override
-    public Menu update(Menu menu) {
-        notNull(menu, "Menu must not be null");
-        return checkNotFoundWithId(menuRepository.save(menu), menu.getId());
-    }
-
     @Transactional
     @Override
     public Menu update(MenuTo menuTo) {
@@ -122,8 +124,4 @@ public class MenuServiceImpl implements MenuService {
         return checkNotFoundWithId(menuRepository.save(menu), menu.getId());
     }
 
-    @Override
-    public void delete(int id) throws NotFoundException {
-        checkNotFoundWithId(menuRepository.delete(id) != 0, id);
-    }
 }

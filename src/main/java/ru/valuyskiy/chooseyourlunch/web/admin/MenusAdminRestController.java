@@ -32,7 +32,7 @@ public class MenusAdminRestController extends AbstractAdminRestController {
     @GetMapping("/{menuId}")
     public MenuTo getByMenuId(@PathVariable("menuId") int menuId) {
         log.info("User id:{} get Menu id:{}", AuthorizedUser.id(), menuId);
-        return getTo(menuService.get(menuId));
+        return menuService.toTo(menuService.get(menuId));
     }
 
     @PostMapping
@@ -42,7 +42,7 @@ public class MenusAdminRestController extends AbstractAdminRestController {
         Menu created = menuService.createByRestaurantIdAndDate(restaurantId, date);
         log.info("User id:{} add new Menu id:{} for Restaurant id:{}", AuthorizedUser.id(), created.getId(), restaurantId);
 
-        return getTo(created);
+        return menuService.toTo(created);
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -50,7 +50,7 @@ public class MenusAdminRestController extends AbstractAdminRestController {
 
         Menu updated = menuService.update(menuTo);
         log.info("User id:{} updated Menu id:{}", AuthorizedUser.id(), updated.getId());
-        return getTo(updated);
+        return menuService.toTo(updated);
     }
 
     @DeleteMapping("/{menuId}")
@@ -58,9 +58,5 @@ public class MenusAdminRestController extends AbstractAdminRestController {
     private void delete(@PathVariable("menuId") int menuId) {
         menuService.delete(menuId);
         log.info("User id:{} deleted Menu id:{}", AuthorizedUser.id(), menuId);
-    }
-
-    private MenuTo getTo(Menu menu) {
-        return new MenuTo(menu.getId(), menu.getRestaurant().getId(), menu.getDate());
     }
 }
