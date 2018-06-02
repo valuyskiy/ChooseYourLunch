@@ -39,7 +39,7 @@ public class User extends AbstractNamedEntity {
     @Column(name = "role")
     @ElementCollection(fetch = FetchType.EAGER)
     @BatchSize(size = 200)
-    private Set<Role> roles;
+    private Set<Role> roles = Collections.singleton(Role.ROLE_USER);
 
     public User() {
     }
