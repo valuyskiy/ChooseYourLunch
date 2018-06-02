@@ -1,7 +1,5 @@
 package ru.valuyskiy.chooseyourlunch.model;
 
-import org.hibernate.validator.constraints.SafeHtml;
-
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotBlank;

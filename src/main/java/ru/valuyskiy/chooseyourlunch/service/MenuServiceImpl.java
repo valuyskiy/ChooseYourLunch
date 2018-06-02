@@ -118,10 +118,10 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public Menu update(MenuTo menuTo) {
         notNull(menuTo, "Menu must not be null");
-        Menu menu = menuRepository.findById(menuTo.getId()).orElse(null);
+        Menu menu = checkNotFoundWithId(menuRepository.findById(menuTo.getId()).orElse(null), menuTo.getId());
         menu.setDate(menuTo.getDate());
         menu.setRestaurant(restaurantRepository.getOne(menuTo.getRestaurantId()));
-        return checkNotFoundWithId(menuRepository.save(menu), menu.getId());
+        return menuRepository.save(menu);
     }
 
 }

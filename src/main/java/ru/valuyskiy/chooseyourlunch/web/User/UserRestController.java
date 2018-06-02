@@ -31,17 +31,17 @@ public class UserRestController {
     @GetMapping(value = "/menus")
     public List<MenuToWithDishes> get(@RequestParam(value = "date", required = false)
                                       @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        log.info("Get all Memus for date {} by user id={}", date, AuthorizedUser.id());
+        log.info("Get all Menus for date {} by user id={}", date, AuthorizedUser.id());
         return menuService.getToWithDishes(date);
     }
 
     @PutMapping(value = "/menus/{id}/votes")
     public ResponseEntity voting(@PathVariable("id") int menuId) {
-        if (votingService.votingById(menuId) != null) {
-            log.info("User id={} vote for memu id={}", AuthorizedUser.id(), menuId);
+        if (votingService.voting(menuId) != null) {
+            log.info("User id={} vote for menu id={}", AuthorizedUser.id(), menuId);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
-            log.info("Vote of user id={} for memu id={} is rejected.", AuthorizedUser.id(), menuId);
+            log.info("Vote of user id={} for menu id={} is rejected.", AuthorizedUser.id(), menuId);
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         }
     }

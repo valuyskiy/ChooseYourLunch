@@ -8,6 +8,8 @@ public class ValidationUtil {
     private ValidationUtil() {
     }
 
+
+    // TODO проверить все методы на необходимость
     public static void checkNotFoundWithId(boolean found, int id) {
         checkNotFound(found, "id=" + id);
     }

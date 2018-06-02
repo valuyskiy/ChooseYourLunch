@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.valuyskiy.chooseyourlunch.AuthorizedUser;
-import ru.valuyskiy.chooseyourlunch.model.Dish;
 import ru.valuyskiy.chooseyourlunch.service.DishService;
 import ru.valuyskiy.chooseyourlunch.to.DishTo;
 
@@ -37,7 +36,7 @@ public class DishesAdminRestController extends AbstractAdminRestController {
         return dish;
     }
 
-
+    @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public DishTo create(@Valid @RequestBody DishTo dishTo) {
 
@@ -56,7 +55,7 @@ public class DishesAdminRestController extends AbstractAdminRestController {
 
     @DeleteMapping("/{dishId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    private void delete(@PathVariable("dishId") int dishId) {
+    public void delete(@PathVariable("dishId") int dishId) {
 
         dishService.delete(dishId);
         log.info("User id:{} deleted dish id:{}", AuthorizedUser.id(), dishId);

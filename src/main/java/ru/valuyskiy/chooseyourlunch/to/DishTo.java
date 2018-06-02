@@ -4,12 +4,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class DishTo extends AbstractTo {
 
-    String name;
+    private String name;
 
-    int price;
+    private int price;
 
     @JsonProperty("menu_id")
-    int menuId;
+    private int menuId;
 
     public DishTo() {
     }

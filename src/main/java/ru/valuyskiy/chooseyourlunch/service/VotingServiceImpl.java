@@ -57,7 +57,7 @@ public class VotingServiceImpl implements VotingService {
     }
 
     @Override
-    public Vote votingById(int menuId) {
+    public Vote voting(int menuId) {
 
         if (LocalTime.now().isBefore(Vote.votingTime)) {
 

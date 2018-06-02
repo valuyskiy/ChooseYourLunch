@@ -37,7 +37,7 @@ public class UsersAdminRestController extends AbstractAdminRestController {
         return user;
     }
 
-
+    @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public User create(@Valid @RequestBody User user) {
 
@@ -56,7 +56,7 @@ public class UsersAdminRestController extends AbstractAdminRestController {
 
     @DeleteMapping("/{userId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    private void delete(@PathVariable("userId") int userId) {
+    public void delete(@PathVariable("userId") int userId) {
 
         userService.delete(userId);
         log.info("User id:{} deleted User id:{}", AuthorizedUser.id(), userId);

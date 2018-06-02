@@ -25,23 +25,25 @@ public class MenusAdminRestController extends AbstractAdminRestController {
 
     @GetMapping
     public List<MenuTo> getByRestaurantId(@PathVariable("restaurantId") int restaurantId) {
+
         log.info("User id:{} get all menus of Restaurant id:{}", AuthorizedUser.id(), restaurantId);
         return menuService.getToByRestaurantId(restaurantId);
     }
 
     @GetMapping("/{menuId}")
     public MenuTo getByMenuId(@PathVariable("menuId") int menuId) {
+
         log.info("User id:{} get Menu id:{}", AuthorizedUser.id(), menuId);
         return menuService.toTo(menuService.get(menuId));
     }
 
+    @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping
     public MenuTo create(@PathVariable("restaurantId") int restaurantId,
                          @RequestParam(value = "date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 
         Menu created = menuService.createByRestaurantIdAndDate(restaurantId, date);
         log.info("User id:{} add new Menu id:{} for Restaurant id:{}", AuthorizedUser.id(), created.getId(), restaurantId);
-
         return menuService.toTo(created);
     }
 
@@ -55,7 +57,8 @@ public class MenusAdminRestController extends AbstractAdminRestController {
 
     @DeleteMapping("/{menuId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    private void delete(@PathVariable("menuId") int menuId) {
+    public void delete(@PathVariable("menuId") int menuId) {
+
         menuService.delete(menuId);
         log.info("User id:{} deleted Menu id:{}", AuthorizedUser.id(), menuId);
     }

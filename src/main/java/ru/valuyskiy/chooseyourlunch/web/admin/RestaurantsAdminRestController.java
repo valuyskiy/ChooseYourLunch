@@ -32,6 +32,7 @@ public class RestaurantsAdminRestController extends AbstractAdminRestController 
         return service.get(id);
     }
 
+    @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public Restaurant create(@Valid @RequestBody Restaurant restaurant) {
         Restaurant created = service.create(restaurant);

@@ -20,6 +20,7 @@ import ru.valuyskiy.chooseyourlunch.util.exception.NotFoundException;
 
 import java.util.List;
 
+import static ru.valuyskiy.chooseyourlunch.util.ValidationUtil.checkNotFound;
 import static ru.valuyskiy.chooseyourlunch.util.ValidationUtil.checkNotFoundWithId;
 
 @Service("userService")
@@ -77,6 +78,12 @@ public class UserServiceImpl implements AbstractCrudService<User>, UserService, 
             throw new UsernameNotFoundException("User " + email + " is not found");
         }
         return new AuthorizedUser(user);
+    }
+
+    @Override
+    public User getByEmail(String email) {
+        Assert.notNull(email, "email must not be null");
+        return checkNotFound(repository.getByEmail(email), "email=" + email);
     }
 
     private User prepareToSave(User user, PasswordEncoder passwordEncoder) {
