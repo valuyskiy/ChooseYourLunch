@@ -11,6 +11,8 @@ import ru.valuyskiy.chooseyourlunch.to.DishTo;
 import javax.validation.Valid;
 import java.util.List;
 
+import static ru.valuyskiy.chooseyourlunch.util.ValidationUtil.assureIdConsistent;
+
 @RestController
 @RequestMapping(value = DishesAdminRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class DishesAdminRestController extends AbstractAdminRestController {
@@ -45,9 +47,10 @@ public class DishesAdminRestController extends AbstractAdminRestController {
         return created;
     }
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public DishTo update(@Valid @RequestBody DishTo dishTo) {
+    @PutMapping(value = "/{dishId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public DishTo update(@Valid @RequestBody DishTo dishTo, @PathVariable("dishId") int dishId) {
 
+        assureIdConsistent(dishTo, dishId);
         DishTo updated = dishService.updateFromTo(dishTo);
         log.info("User id:{} updated dish id:{}", AuthorizedUser.id(), updated.getId());
         return updated;

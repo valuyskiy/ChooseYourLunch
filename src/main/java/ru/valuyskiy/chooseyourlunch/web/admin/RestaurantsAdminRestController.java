@@ -11,6 +11,8 @@ import ru.valuyskiy.chooseyourlunch.service.RestaurantService;
 import javax.validation.Valid;
 import java.util.List;
 
+import static ru.valuyskiy.chooseyourlunch.util.ValidationUtil.assureIdConsistent;
+
 @RestController
 @RequestMapping(value = RestaurantsAdminRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantsAdminRestController extends AbstractAdminRestController {
@@ -40,9 +42,10 @@ public class RestaurantsAdminRestController extends AbstractAdminRestController 
         return created;
     }
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Restaurant rename(@Valid @RequestBody Restaurant restaurant) {
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Restaurant update(@Valid @RequestBody Restaurant restaurant, @PathVariable("id") int restaurantId) {
         Restaurant updated = service.update(restaurant);
+        assureIdConsistent(restaurant, restaurantId);
         log.info("User id:{} rename Restaurant id:{}", AuthorizedUser.id(), updated.getId());
         return updated;
     }

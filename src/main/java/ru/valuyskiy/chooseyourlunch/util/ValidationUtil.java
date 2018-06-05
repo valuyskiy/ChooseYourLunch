@@ -1,15 +1,16 @@
 package ru.valuyskiy.chooseyourlunch.util;
 
+import ru.valuyskiy.chooseyourlunch.HasId;
 import ru.valuyskiy.chooseyourlunch.model.AbstractBaseEntity;
 import ru.valuyskiy.chooseyourlunch.util.exception.NotFoundException;
+
+import java.time.LocalDate;
 
 public class ValidationUtil {
 
     private ValidationUtil() {
     }
 
-
-    // TODO проверить все методы на необходимость
     public static void checkNotFoundWithId(boolean found, int id) {
         checkNotFound(found, "id=" + id);
     }
@@ -35,7 +36,7 @@ public class ValidationUtil {
         }
     }
 
-    public static void assureIdConsistent(AbstractBaseEntity bean, int id) {
+    public static void assureIdConsistent(HasId bean, int id) {
 //      http://stackoverflow.com/a/32728226/548473
         if (bean.isNew()) {
             bean.setId(id);

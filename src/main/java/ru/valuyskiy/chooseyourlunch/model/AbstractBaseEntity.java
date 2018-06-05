@@ -2,12 +2,13 @@ package ru.valuyskiy.chooseyourlunch.model;
 
 import org.hibernate.Hibernate;
 import org.springframework.data.domain.Persistable;
+import ru.valuyskiy.chooseyourlunch.HasId;
 
 import javax.persistence.*;
 
 @MappedSuperclass
 @Access(AccessType.FIELD)
-public abstract class AbstractBaseEntity implements Persistable<Integer> {
+public abstract class AbstractBaseEntity implements Persistable<Integer>, HasId {
     public static final int START_SEQ = 100000;
 
     @Id

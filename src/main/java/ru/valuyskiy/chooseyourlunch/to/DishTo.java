@@ -2,8 +2,13 @@ package ru.valuyskiy.chooseyourlunch.to;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 public class DishTo extends AbstractTo {
 
+    @NotNull
+    @NotBlank
     private String name;
 
     private int price;

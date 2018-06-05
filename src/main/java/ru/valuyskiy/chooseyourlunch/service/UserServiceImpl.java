@@ -20,6 +20,7 @@ import ru.valuyskiy.chooseyourlunch.util.exception.NotFoundException;
 
 import java.util.List;
 
+import static ru.valuyskiy.chooseyourlunch.util.ValidationUtil.checkNew;
 import static ru.valuyskiy.chooseyourlunch.util.ValidationUtil.checkNotFound;
 import static ru.valuyskiy.chooseyourlunch.util.ValidationUtil.checkNotFoundWithId;
 
@@ -37,11 +38,11 @@ public class UserServiceImpl implements AbstractCrudService<User>, UserService, 
         this.passwordEncoder = passwordEncoder;
     }
 
-    // TODO Configure cache
     @CacheEvict(value = "users", allEntries = true)
     @Override
     public User create(User user) {
         Assert.notNull(user, "User must not be null");
+        checkNew(user);
         return repository.save(prepareToSave(user, passwordEncoder));
     }
 
@@ -95,7 +96,7 @@ public class UserServiceImpl implements AbstractCrudService<User>, UserService, 
 
     private void checkModificationAllowed(int id) {
         if (id == AbstractBaseEntity.START_SEQ) {
-            throw new ModificationRestrictionException();
+            throw new ModificationRestrictionException("Admin modification is forbidden");
         }
     }
 }

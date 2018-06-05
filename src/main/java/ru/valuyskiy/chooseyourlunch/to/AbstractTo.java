@@ -1,12 +1,14 @@
 package ru.valuyskiy.chooseyourlunch.to;
 
-public class AbstractTo {
+import ru.valuyskiy.chooseyourlunch.HasId;
+
+public class AbstractTo implements HasId{
     protected Integer id;
 
-    public AbstractTo() {
+    AbstractTo() {
     }
 
-    public AbstractTo(Integer id) {
+    AbstractTo(Integer id) {
         this.id = id;
     }
 

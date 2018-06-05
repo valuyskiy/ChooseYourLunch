@@ -14,6 +14,8 @@ import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 
+import static ru.valuyskiy.chooseyourlunch.util.ValidationUtil.assureIdConsistent;
+
 @RestController
 @RequestMapping(value = MenusAdminRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class MenusAdminRestController extends AbstractAdminRestController {
@@ -47,9 +49,10 @@ public class MenusAdminRestController extends AbstractAdminRestController {
         return menuService.toTo(created);
     }
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public MenuTo update(@Valid @RequestBody MenuTo menuTo) {
+    @PutMapping(value = "/{menuId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public MenuTo update(@Valid @RequestBody MenuTo menuTo, @PathVariable("menuId") int menuId) {
 
+        assureIdConsistent(menuTo, menuId);
         Menu updated = menuService.update(menuTo);
         log.info("User id:{} updated Menu id:{}", AuthorizedUser.id(), updated.getId());
         return menuService.toTo(updated);
