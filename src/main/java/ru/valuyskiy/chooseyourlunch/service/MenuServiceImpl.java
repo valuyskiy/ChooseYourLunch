@@ -1,6 +1,8 @@
 package ru.valuyskiy.chooseyourlunch.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.valuyskiy.chooseyourlunch.AuthorizedUser;
@@ -18,6 +20,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 import static org.springframework.util.Assert.notNull;
+import static ru.valuyskiy.chooseyourlunch.util.ValidationUtil.checkNew;
 import static ru.valuyskiy.chooseyourlunch.util.ValidationUtil.checkNotFoundWithId;
 
 @Service("menuService")
@@ -32,12 +35,15 @@ public class MenuServiceImpl implements MenuService {
     @Autowired
     RestaurantRepository restaurantRepository;
 
+    @CacheEvict(value = "menus", allEntries = true)
     @Override
     public Menu create(Menu menu) {
         notNull(menu, "Menu must not be null");
+        checkNew(menu);
         return menuRepository.save(menu);
     }
 
+    @CacheEvict(value = "menus", allEntries = true)
     @Override
     public Menu createByRestaurantIdAndDate(int restaurantId, LocalDate date) {
         if (date == null) {
@@ -51,24 +57,26 @@ public class MenuServiceImpl implements MenuService {
         return checkNotFoundWithId(menuRepository.findById(id).orElse(null), id);
     }
 
+    @Cacheable("menus")
     @Override
     public List<Menu> getAll() {
         return menuRepository.findAll();
     }
 
+    @CacheEvict(value = "menus", allEntries = true)
     @Override
     public Menu update(Menu menu) {
         notNull(menu, "Menu must not be null");
         return checkNotFoundWithId(menuRepository.save(menu), menu.getId());
     }
 
-
+    @CacheEvict(value = "menus", allEntries = true)
     @Override
     public void delete(int id) throws NotFoundException {
         checkNotFoundWithId(menuRepository.delete(id) != 0, id);
     }
 
-
+    @Cacheable("menus")
     @Override
     public List<MenuTo> getToByRestaurantId(int restaurantId) {
         return menuRepository.getByRestaurant(restaurantId).stream()
@@ -114,6 +122,7 @@ public class MenuServiceImpl implements MenuService {
                 totalPrice);
     }
 
+    @CacheEvict(value = "menus", allEntries = true)
     @Transactional
     @Override
     public Menu update(MenuTo menuTo) {

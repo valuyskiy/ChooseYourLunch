@@ -1,5 +1,6 @@
 package ru.valuyskiy.chooseyourlunch.model;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -8,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Entity
 @Table(name = "menu", uniqueConstraints = @UniqueConstraint(columnNames = {"restaurant_id", "date"}, name = "menu_unique_restaurant_date_idx"))
 public class Menu extends AbstractBaseEntity {
@@ -42,6 +44,13 @@ public class Menu extends AbstractBaseEntity {
         super(id);
         this.restaurant = restaurant;
         this.date = date;
+    }
+
+    public Menu(int id, Restaurant restaurant, LocalDate date, List<Dish> dishes) {
+        super(id);
+        this.restaurant = restaurant;
+        this.date = date;
+        this.dishes = dishes;
     }
 
     public Restaurant getRestaurant() {
