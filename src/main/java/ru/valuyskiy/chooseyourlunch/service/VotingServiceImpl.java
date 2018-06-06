@@ -9,10 +9,10 @@ import ru.valuyskiy.chooseyourlunch.model.Vote;
 import ru.valuyskiy.chooseyourlunch.repository.MenuRepository;
 import ru.valuyskiy.chooseyourlunch.repository.UserRepository;
 import ru.valuyskiy.chooseyourlunch.repository.VoteRepository;
+import ru.valuyskiy.chooseyourlunch.util.TimeMachine;
 import ru.valuyskiy.chooseyourlunch.util.exception.NotFoundException;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 import static ru.valuyskiy.chooseyourlunch.util.ValidationUtil.checkNotFoundWithId;
@@ -59,7 +59,7 @@ public class VotingServiceImpl implements VotingService {
     @Override
     public Vote voting(int menuId) {
 
-        if (LocalTime.now().isBefore(Vote.votingTime)) {
+        if (TimeMachine.now().isBefore(Vote.VOTING_TIME)) { // TimeMachine костыль для тестов на время голосования
 
             Menu menu = checkNotFoundWithId(menuRepository.findById(menuId).orElse(null), menuId);
             int userId = AuthorizedUser.id();

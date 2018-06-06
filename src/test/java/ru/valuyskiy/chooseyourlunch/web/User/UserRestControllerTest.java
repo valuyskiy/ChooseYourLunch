@@ -4,14 +4,19 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
+import ru.valuyskiy.chooseyourlunch.model.Vote;
 import ru.valuyskiy.chooseyourlunch.service.MenuService;
 import ru.valuyskiy.chooseyourlunch.to.MenuToWithDishes;
+import ru.valuyskiy.chooseyourlunch.util.TimeMachine;
 import ru.valuyskiy.chooseyourlunch.web.AbstractControllerTest;
 import ru.valuyskiy.chooseyourlunch.web.json.JsonUtil;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.internal.bytebuddy.matcher.ElementMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -21,6 +26,7 @@ import static ru.valuyskiy.chooseyourlunch.MenuTestData.*;
 import static ru.valuyskiy.chooseyourlunch.TestUtil.getContent;
 import static ru.valuyskiy.chooseyourlunch.TestUtil.userHttpBasic;
 import static ru.valuyskiy.chooseyourlunch.UserTestData.USER;
+import static ru.valuyskiy.chooseyourlunch.UserTestData.USER_ID;
 
 public class UserRestControllerTest extends AbstractControllerTest {
 
@@ -42,7 +48,6 @@ public class UserRestControllerTest extends AbstractControllerTest {
         assertMatch(returned, MENU3_TO_WITH_DISHES_RESTAURANT1, MENU3_TO_WITH_DISHES_RESTAURANT2);
     }
 
-
     @Test
     public void getMenusByDate() throws Exception {
 
@@ -63,41 +68,63 @@ public class UserRestControllerTest extends AbstractControllerTest {
                 .andDo(print());
     }
 
-
-    // TODO mock на LocalDateTime до 11:00
+    // mock на время для голосование до 11:00
     @Test
     public void testVoting() throws Exception {
 
-//        MenuToWithDishes menuToWithDishesBeforeVoting = menuService.getToWithDishes(menuService.get(MENU3_RESTAURANT2_ID));
+        LocalDateTime nowDateTime = LocalDateTime.now();
+        LocalDateTime fixedDateTime = LocalDateTime.of(
+                nowDateTime.getYear(),
+                nowDateTime.getMonthValue(),
+                nowDateTime.getDayOfMonth(),
+                Vote.VOTING_TIME.getHour() - 1,
+                nowDateTime.getMinute()
+        );
+
+        TimeMachine.useFixedClockAt(fixedDateTime);
+
+        MenuToWithDishes menuToWithDishesBeforeVoting = menuService.getToWithDishes(menuService.get(MENU3_RESTAURANT2_ID), USER_ID);
 
         mockMvc.perform(put("/rest/user/menus/" + MENU3_RESTAURANT2_ID + "/votes")
                 .with(userHttpBasic(USER)))
-                //              .andExpect(status().isCreated())
+                .andExpect(status().isCreated())
                 .andDo(print());
 
-//        MenuToWithDishes menuToWithDishesAfterVoting = menuService.getToWithDishes(menuService.get(MENU3_RESTAURANT2_ID));
-//
-//        assertThat("The vote is not counted",
-//                menuToWithDishesAfterVoting.getVoteCounter() - menuToWithDishesBeforeVoting.getVoteCounter(),
-//                is(1) );
+        MenuToWithDishes menuToWithDishesAfterVoting = menuService.getToWithDishes(menuService.get(MENU3_RESTAURANT2_ID), USER_ID);
 
+        TimeMachine.useSystemDefaultZoneClock();
+
+        assertThat(menuToWithDishesAfterVoting.getVoteCounter() - menuToWithDishesBeforeVoting.getVoteCounter())
+                .isEqualTo(1);
     }
 
-    // TODO mock на LocalDateTime после 11:00
+    // mock на время для после 11:00
     @Test
     public void testVotingOutOfTime() throws Exception {
-        mockMvc.perform(put("/rest/user/menus/" + MENU2_RESTAURANT2_ID + "/votes")
-                .with(userHttpBasic(USER)))
-                .andExpect(status().isUnprocessableEntity())
-                .andDo(print());
-    }
 
-    // TODO mock на LocalDate до 11:00
-    @Test
-    public void testVotingAnotherDay() throws Exception {
-        mockMvc.perform(put("/rest/user/menus/" + "100009" + "/votes")
+        LocalDateTime nowDateTime = LocalDateTime.now();
+        LocalDateTime fixedDateTime = LocalDateTime.of(
+                nowDateTime.getYear(),
+                nowDateTime.getMonthValue(),
+                nowDateTime.getDayOfMonth(),
+                Vote.VOTING_TIME.getHour() + 1,
+                nowDateTime.getMinute()
+        );
+
+        TimeMachine.useFixedClockAt(fixedDateTime);
+
+        MenuToWithDishes menuToWithDishesBeforeVoting = menuService.getToWithDishes(menuService.get(MENU3_RESTAURANT2_ID), USER_ID);
+
+        mockMvc.perform(put("/rest/user/menus/" + MENU3_RESTAURANT2_ID + "/votes")
                 .with(userHttpBasic(USER)))
-                .andExpect(status().isUnprocessableEntity())
-                .andDo(print());
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+
+        MenuToWithDishes menuToWithDishesAfterVoting = menuService.getToWithDishes(menuService.get(MENU3_RESTAURANT2_ID), USER_ID);
+
+        TimeMachine.useSystemDefaultZoneClock();
+
+        assertThat(menuToWithDishesAfterVoting.getVoteCounter() - menuToWithDishesBeforeVoting.getVoteCounter())
+                .isEqualTo(0);
     }
 }

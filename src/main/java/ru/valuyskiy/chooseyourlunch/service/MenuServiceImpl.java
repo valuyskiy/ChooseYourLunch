@@ -5,7 +5,6 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.valuyskiy.chooseyourlunch.AuthorizedUser;
 import ru.valuyskiy.chooseyourlunch.model.Dish;
 import ru.valuyskiy.chooseyourlunch.model.Menu;
 import ru.valuyskiy.chooseyourlunch.repository.MenuRepository;
@@ -91,18 +90,18 @@ public class MenuServiceImpl implements MenuService {
 
     @Transactional
     @Override
-    public List<MenuToWithDishes> getToWithDishes(LocalDate date) {
+    public List<MenuToWithDishes> getToWithDishes(LocalDate date, int userId) {
         if (date == null) {
             date = LocalDate.now();
         }
         return menuRepository.getWithDishesByDate(date).stream()
-                .map(this::getToWithDishes)
+                .map(menu -> getToWithDishes(menu, userId))
                 .collect(toList());
     }
 
     @Transactional
     @Override
-    public MenuToWithDishes getToWithDishes(Menu menu) {
+    public MenuToWithDishes getToWithDishes(Menu menu, int userId) {
 
         int totalPrice = menu.getDishes().stream()
                 .mapToInt(Dish::getPrice)
@@ -110,7 +109,7 @@ public class MenuServiceImpl implements MenuService {
 
         int voteCounter = voteRepository.countByMenu_Id(menu.getId());
 
-        boolean isVoting = voteRepository.countByUser_IdAndMenu_Id(AuthorizedUser.id(), menu.getId()) > 0;
+        boolean isVoting = voteRepository.countByUser_IdAndMenu_Id(userId, menu.getId()) > 0;
 
         return new MenuToWithDishes(
                 menu.getId(),

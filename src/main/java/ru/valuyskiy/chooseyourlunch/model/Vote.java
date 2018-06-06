@@ -12,7 +12,7 @@ import java.time.LocalTime;
 @Table(name = "voting", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "date"}, name = "voting_unique_user_date_idx"))
 public class Vote extends AbstractBaseEntity {
 
-    public static final LocalTime votingTime = LocalTime.of(11, 0);
+    public static final LocalTime VOTING_TIME = LocalTime.of(11, 0);
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
