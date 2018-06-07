@@ -67,6 +67,18 @@ public class UserServiceImpl implements AbstractCrudService<User>, UserService, 
 
     @CacheEvict(value = "users", allEntries = true)
     @Override
+    public User updateUserProfile(User user) {
+        Assert.notNull(user, "User must not be null");
+        checkModificationAllowed(user.getId());
+
+        User oldUser = get(user.getId());
+        user.setRoles(oldUser.getRoles());      // block change roles
+
+        return checkNotFoundWithId(repository.save(prepareToSave(user, passwordEncoder)), user.getId());
+    }
+
+    @CacheEvict(value = "users", allEntries = true)
+    @Override
     public void delete(int id) {
         checkModificationAllowed(id);
         checkNotFoundWithId(repository.delete(id) != 0, id);

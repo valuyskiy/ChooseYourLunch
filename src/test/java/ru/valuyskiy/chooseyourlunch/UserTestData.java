@@ -24,7 +24,7 @@ public class UserTestData {
     }
 
     public static User getUpdated() {
-        return new User(USER.getId(), "Egor", "egor@google.com", USER.getPassword(), Role.ROLE_ADMIN, Role.ROLE_USER);
+        return new User(USER.getId(), "Egor", "egor@google.com", USER.getPassword(), Role.ROLE_USER);
     }
 
     public static void assertMatch(User actual, User expected) {

@@ -6,4 +6,6 @@ public interface UserService extends AbstractCrudService<User> {
 
     User getByEmail(String email);
 
+    User updateUserProfile(User user);
+
 }

@@ -46,6 +46,6 @@ public class ProfileRestController {
 
         assureIdConsistent(user, authorizedUser.getId());
         log.info("User id:{} update profile", authorizedUser.getId());
-        return userService.update(user);
+        return userService.updateUserProfile(user);
     }
 }
