@@ -2,7 +2,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/cc4dc3c9b6054b19be5f768cd0f265f3)](https://www.codacy.com/app/valuyskiy/ChooseYourLunch?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=valuyskiy/ChooseYourLunch&amp;utm_campaign=Badge_Grade)
 [![Build Status](https://travis-ci.org/valuyskiy/ChooseYourLunch.svg?branch=master)](https://travis-ci.org/valuyskiy/ChooseYourLunch)
 
-##A voting system for deciding where to have lunch.
+## A voting system for deciding where to have lunch.
 
  * 2 types of users: admin and regular users
  * Admin can input a restaurant and it's lunch menu of the day (2-5 items usually, just a dish name and price)
@@ -16,11 +16,11 @@
  * Each restaurant provides new menu each day.
  
  
- # REST API Documentation
+# REST API Documentation
  
- ## Registration
+## Registration
  
- **New user registration**
+**New user registration**
  
  `POST  http://{your.host:port}/rest/register`
  
@@ -52,11 +52,11 @@
        409 - User with this email already exists
        422 - Fields validation error
    
- ##Administrator module
+## Administrator module
  
- ####Restaurants
+#### Restaurants
  
- **Get all restaurants**
+**Get all restaurants**
  
  `POST  http://{your.host:port}/rest/admin/restaurants`
  
@@ -85,9 +85,9 @@
        401 - Unauthorized
        403 - Forbidden
  
- **Get restaurant by ID**
+**Get restaurant by ID**
  
- `GET  http://{your.host:port}/rest/admin/restaurants/{RestaurantId}`
+`GET  http://{your.host:port}/rest/admin/restaurants/{RestaurantId}`
  
      curl -X POST \
          http://localhost:8080/rest/admin/restaurants \
@@ -115,7 +115,7 @@
        409 - Restaurant with this name already exists
        422 - Fields validation error
  
- **Create new restaurant**
+**Create new restaurant**
  
  `POST  http://{your.host:port}/rest/admin/restaurants`
  
@@ -144,7 +144,7 @@
        409 - Restaurant with this name already exists
        422 - Fields validation error
  
- **Update restaurant**
+**Update restaurant**
  
  `PUT  http://{your.host:port}/rest/admin/restaurants/{RestaurantId}`
  
@@ -175,7 +175,7 @@
        409 - Restaurant with this name already exists
        422 - Fields validation error
  
- **Delete restaurant**
+**Delete restaurant**
  
  `DELETE  http://{your.host:port}/rest/admin/restaurants/{RestaurantId}`
  
@@ -194,9 +194,9 @@
        403 - Forbidden
        404 - Restaurant not found
  
- ####Menu
+#### Menu
  
- **Get all menus of the restaurant**
+**Get all menus of the restaurant**
  
  `GET  http://{your.host:port}/rest/admin/restaurants/{RestaurantId}/menus`
  
@@ -227,7 +227,7 @@
        401 - Unauthorized
        403 - Forbidden
   
- **Get menu by ID**
+**Get menu by ID**
  
  `GET  http://{your.host:port}/rest/admin/restaurants/{RestaurantId}/menus/{MenuID}`
  
@@ -252,7 +252,7 @@
        403 - Forbidden
        404 - Restaurant or menu not found
  
- **Create new menu today**
+**Create new menu today**
  
  `POST  http://{your.host:port}/rest/admin/restaurants/{RestaurantId}/menus`
  
@@ -280,7 +280,7 @@
        409 - Menu for this date already exists
        422 - Fields validation error
   
- **Create new menu for date**
+**Create new menu for date**
   
   `POST  http://{your.host:port}/rest/admin/restaurants/{RestaurantId}/menus/?date={YYYY-MM-DD}`
   
@@ -308,7 +308,7 @@
        409 - Menu for this date already exists
        422 - Fields validation error
   
- **Update menu**
+**Update menu**
   
   `PUT  http://{your.host:port}/rest/admin/restaurants/{RestaurantId}/menus/{MenuId}`
   
@@ -340,7 +340,7 @@
        409 - Menu for this date already exists
        422 - Fields validation error
   
- **Delete menu**
+**Delete menu**
   
   `DELETE  http://{your.host:port}/rest/admin/restaurants/{RestaurantId}/menus/{MenuId}`
    
@@ -360,9 +360,9 @@
      404 - Restaurant or menu not found
   
   
- ####Dishes
+#### Dishes
  
- **Get dishes by menu ID**
+**Get dishes by menu ID**
   
    `GET  http://{your.host:port}/rest/admin/restaurants/{RestaurantId}/menus/{MenuId}/dishes`
  
@@ -401,7 +401,7 @@
        401 - Unauthorized
        403 - Forbidden
   
- **Get dish by ID**
+**Get dish by ID**
   
    `GET  http://{your.host:port}/rest/admin/restaurants/{RestaurantId}/menus/{MenuId}/dishes/{DishId}`
  
@@ -427,7 +427,7 @@
        403 - Forbidden
        404 - Dish not found
    
- **Add new dish in menu**
+**Add new dish in menu**
  
    `POST  http://{your.host:port}/rest/admin/restaurants/{RestaurantId}/menus/{MenuId}/dishes`
   
@@ -461,7 +461,7 @@
        409 - Dish with this name already exists
        422 - Fields validation error 
  
- **Update dish**
+**Update dish**
   
    `PUT  http://{your.host:port}/rest/admin/restaurants/{RestaurantId}/menus/{MenuId}/dishes/{DishId}`
  
@@ -496,7 +496,7 @@
        409 - Dish with this name already exists
        422 - Fields validation error   
   
-  **Delete dish**
+**Delete dish**
   
   `DELETE  http://{your.host:port}/rest/admin/restaurants/{RestaurantId}/menus/{MenuId}/dishes/{DishId}`
   
@@ -515,9 +515,9 @@
         403 - Forbidden
         404 - Restaurant not found
  
- ####Users
+#### Users
   
- **Get all Users**
+**Get all Users**
     
   `GET http://localhost:8080/rest/admin/users`
   
@@ -555,7 +555,7 @@
        401 - Unauthorized
        403 - Forbidden 
   
- **Get User by ID**
+**Get User by ID**
  
   `GET http://localhost:8080/rest/admin/users/{UserId}`
   
@@ -584,7 +584,7 @@
        403 - Forbidden
        404 - User not found 
  
- **Create new User** 
+**Create new User** 
  
   `POST  http://{your.host:port}/rest/admin/users`
   
@@ -622,7 +622,7 @@
        409 - User with this email already exists
        422 - Fields validation error
   
- **Update User**
+**Update User**
  
   `POST  http://{your.host:port}/rest/admin/users/{UserID}`
   
@@ -663,7 +663,7 @@
        409 - User with this email already exists
        422 - Fields validation error 
   
- **Delete User**
+**Delete User**
  
   `POST  http://{your.host:port}/rest/admin/users/{UserID}`
      
@@ -682,11 +682,11 @@
         403 - Forbidden
         404 - User not found   
  
- ##User module 
+## User module 
  
- ####Profile
+#### Profile
  
- **Get User profile**
+**Get User profile**
  
   `GET  http://{your.host:port}/rest/user/profile`
  
@@ -716,7 +716,7 @@
        422 - Fields validation error 
   
   
- **Update User profile**
+**Update User profile**
  
   `PUT  http://{your.host:port}/rest/user/profile`
  
@@ -751,7 +751,7 @@
        409 - User with this email already exists
        422 - Fields validation error 
  
- **Delete User profile**
+**Delete User profile**
   
    `DELETE  http://{your.host:port}/rest/user/profile`
   
@@ -768,9 +768,9 @@
         204 - No content. Deleted
         401 - Unauthorized
         
- ####Menus for Users
+#### Menus for Users
  
- **Get today's menus**
+**Get today's menus**
  
   `PUT  http://{your.host:port}/rest/user/menus`
  
@@ -847,7 +847,7 @@
        401 - Unauthorized
        403 - Forbidden
          
- **Get menus for date**
+**Get menus for date**
    
  `PUT  http://{your.host:port}/rest/user/menus?date={YYYY-MM-DD}`
  
@@ -855,9 +855,9 @@
         'http://localhost:8080/rest/user/menus?date=2018-05-20' \
         -H 'Authorization: Basic dXNlckBnb29nbGUucnU6dXNlclBhc3N3b3Jk' 
          
- ####Voting
+#### Voting
  
- **Voting to menu**
+**Voting to menu**
  
  `PUT  http://{your.host:port}/rest/user/menus/{MenuId}/votes`
  
