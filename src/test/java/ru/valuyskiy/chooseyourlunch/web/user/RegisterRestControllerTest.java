@@ -1,4 +1,4 @@
-package ru.valuyskiy.chooseyourlunch.web.User;
+package ru.valuyskiy.chooseyourlunch.web.user;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

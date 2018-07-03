@@ -1,4 +1,4 @@
-package ru.valuyskiy.chooseyourlunch.web.User;
+package ru.valuyskiy.chooseyourlunch.web.user;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +38,7 @@ public class UserRestController {
     @PutMapping(value = "/menus/{id}/votes")
     public ResponseEntity voting(@PathVariable("id") int menuId) {
         if (votingService.voting(menuId) != null) {
-            log.info("User id={} vote for menu id={}", AuthorizedUser.id(), menuId);
+            log.info("user id={} vote for menu id={}", AuthorizedUser.id(), menuId);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
             log.info("Vote of user id={} for menu id={} is rejected.", AuthorizedUser.id(), menuId);

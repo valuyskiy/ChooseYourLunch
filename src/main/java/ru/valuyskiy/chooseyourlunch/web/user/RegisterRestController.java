@@ -1,4 +1,4 @@
-package ru.valuyskiy.chooseyourlunch.web.User;
+package ru.valuyskiy.chooseyourlunch.web.user;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

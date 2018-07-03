@@ -141,7 +141,7 @@ public class RestaurantsAdminRestControllerTest extends AbstractControllerTest {
         mockMvc.perform(post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
-                .content(JsonUtil.writeValue(created)))
+                .content(writeValue(created)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(errorType(ErrorType.VALIDATION_ERROR))
                 .andDo(print());
@@ -155,7 +155,7 @@ public class RestaurantsAdminRestControllerTest extends AbstractControllerTest {
         mockMvc.perform(post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
-                .content(JsonUtil.writeValue(created)))
+                .content(writeValue(created)))
                 .andDo(print())
                 .andExpect(status().isConflict())
                 .andExpect(errorType(ErrorType.DATA_ERROR));

@@ -4,8 +4,6 @@ import ru.valuyskiy.chooseyourlunch.HasId;
 import ru.valuyskiy.chooseyourlunch.model.AbstractBaseEntity;
 import ru.valuyskiy.chooseyourlunch.util.exception.NotFoundException;
 
-import java.time.LocalDate;
-
 public class ValidationUtil {
 
     private ValidationUtil() {
