@@ -10,16 +10,18 @@ import ru.valuyskiy.chooseyourlunch.repository.MenuRepository;
 import ru.valuyskiy.chooseyourlunch.repository.UserRepository;
 import ru.valuyskiy.chooseyourlunch.repository.VoteRepository;
 import ru.valuyskiy.chooseyourlunch.to.VotingStatisticsTo;
-import ru.valuyskiy.chooseyourlunch.util.TimeMachine;
 import ru.valuyskiy.chooseyourlunch.util.exception.NotFoundException;
 
-import java.time.LocalDate;
+import java.time.*;
 import java.util.List;
 
 import static ru.valuyskiy.chooseyourlunch.util.ValidationUtil.checkNotFoundWithId;
 
 @Service("voteService")
 public class VotingServiceImpl implements VotingService {
+
+    private static Clock clock;
+    private static ZoneId zoneId;
 
     @Autowired
     VoteRepository voteRepository;
@@ -29,6 +31,15 @@ public class VotingServiceImpl implements VotingService {
 
     @Autowired
     UserRepository userRepository;
+
+    public VotingServiceImpl() {
+        clock = Clock.systemDefaultZone();
+        zoneId = ZoneId.systemDefault();
+    }
+
+    public void setClock(LocalDateTime date) {
+        clock = Clock.fixed(date.atZone(zoneId).toInstant(), zoneId);
+    }
 
     @Override
     public Vote create(Vote vote) {
@@ -60,7 +71,7 @@ public class VotingServiceImpl implements VotingService {
     @Override
     public Vote voting(int menuId) {
 
-        if (TimeMachine.now().isBefore(Vote.VOTING_TIME)) { // TimeMachine костыль для тестов на время голосования
+        if (LocalTime.now(clock).isBefore(Vote.VOTING_TIME)) {
 
             Menu menu = checkNotFoundWithId(menuRepository.findById(menuId).orElse(null), menuId);
             int userId = AuthorizedUser.id();
