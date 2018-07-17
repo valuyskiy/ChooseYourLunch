@@ -66,13 +66,13 @@ public class VotingServiceImpl implements VotingService {
 
             if (LocalDate.now().equals(menu.getDate())) {
 
-                Vote vote = voteRepository.getByUser_IdAndDate(userId, LocalDate.now());
+                Vote todayVote = voteRepository.getByUser_IdAndDate(userId, LocalDate.now());
 
-                if (vote == null) {
+                if (todayVote == null) {
                     return voteRepository.save(new Vote(userRepository.getOne(userId), LocalDate.now(), menu));
                 } else {
-                    vote.setMenu(menu);
-                    return voteRepository.save(vote);
+                    todayVote.setMenu(menu);
+                    return voteRepository.save(todayVote);
                 }
             }
         }

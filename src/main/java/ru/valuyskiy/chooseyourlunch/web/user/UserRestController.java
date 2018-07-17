@@ -31,8 +31,12 @@ public class UserRestController {
     @GetMapping(value = "/menus")
     public List<MenuToWithDishes> get(@RequestParam(value = "date", required = false)
                                       @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        if (date == null) {
+            date = LocalDate.now();
+        }
+
         log.info("Get all Menus for date {} by user id={}", date, AuthorizedUser.id());
-        return menuService.getToWithDishes(date, AuthorizedUser.id());
+        return menuService.getToWithDishes(date);
     }
 
     @PutMapping(value = "/menus/{id}/votes")

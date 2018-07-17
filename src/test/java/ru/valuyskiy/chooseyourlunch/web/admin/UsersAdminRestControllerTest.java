@@ -80,14 +80,6 @@ public class UsersAdminRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void testDeleteAdmin() throws Exception {
-        mockMvc.perform(delete(REST_URL + ADMIN_ID)
-                .with(userHttpBasic(ADMIN)))
-                .andDo(print())
-                .andExpect(status().isUnavailableForLegalReasons());
-    }
-
-    @Test
     public void testDeleteNotFound() throws Exception {
         mockMvc.perform(delete(REST_URL + 1)
                 .with(userHttpBasic(ADMIN)))
