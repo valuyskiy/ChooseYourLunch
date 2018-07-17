@@ -2,7 +2,6 @@ package ru.valuyskiy.chooseyourlunch.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -23,7 +22,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Autowired
     private RestaurantRepository repository;
 
-    @CacheEvict(value = "restaurants", allEntries = true)
+    @CacheEvict(value = "menus", allEntries = true)
     @Override
     public Restaurant create(Restaurant restaurant) {
         Assert.notNull(restaurant, "Restaurant must not be null");
@@ -36,20 +35,19 @@ public class RestaurantServiceImpl implements RestaurantService {
         return checkNotFoundWithId(repository.findById(id).orElse(null), id);
     }
 
-    @Cacheable("restaurants")
     @Override
     public List<Restaurant> getAll() {
         return repository.findAll(SORT_NAME);
     }
 
-    @CacheEvict(value = "restaurants", allEntries = true)
+    @CacheEvict(value = "menus", allEntries = true)
     @Override
     public Restaurant update(Restaurant restaurant) {
         Assert.notNull(restaurant, "Restaurant must not be null");
         return checkNotFoundWithId(repository.save(restaurant), restaurant.getId());
     }
 
-    @CacheEvict(value = "restaurants", allEntries = true)
+    @CacheEvict(value = "menus", allEntries = true)
     @Override
     public void delete(int id) throws NotFoundException {
         checkNotFoundWithId(repository.delete(id) != 0, id);

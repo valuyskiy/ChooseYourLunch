@@ -806,10 +806,7 @@
                      "name": "Mineral water",
                      "price": 10000,
                  }
-             ],
-             "voteCounter": 1,
-             "isVoting": true,
-             "totalPrice": 73000
+             ]
          },
          {
              "id": 100031,
@@ -834,10 +831,7 @@
                      "name": "Juice",
                      "price": 15000
                  },
-             ],
-             "voteCounter": 0,
-             "isVoting": false,
-             "totalPrice": 116000
+             ]
          }
      ]
      

@@ -13,9 +13,7 @@ public interface MenuService extends AbstractCrudService<Menu> {
 
     MenuTo toTo(Menu menu);
 
-    List<MenuToWithDishes> getToWithDishes(LocalDate date, int userId);
-
-    MenuToWithDishes getToWithDishes(Menu menu, int userId);
+    List<MenuToWithDishes> getToWithDishes(LocalDate date);
 
     Menu createByRestaurantIdAndDate(int restaurantId, LocalDate date);
 

@@ -39,40 +39,28 @@ public class MenuTestData {
             MENU3_RESTAURANT1.getId(),
             MENU3_RESTAURANT1.getDate(),
             MENU3_RESTAURANT1.getRestaurant(),
-            MENU3_RESTAURANT1.getDishes(),
-            1,
-            false,
-            228000
+            MENU3_RESTAURANT1.getDishes()
     );
 
     public static final MenuToWithDishes MENU3_TO_WITH_DISHES_RESTAURANT2 = new MenuToWithDishes(
             MENU3_RESTAURANT2.getId(),
             MENU3_RESTAURANT2.getDate(),
             MENU3_RESTAURANT2.getRestaurant(),
-            MENU3_RESTAURANT2.getDishes(),
-            0,
-            false,
-            338000
+            MENU3_RESTAURANT2.getDishes()
     );
 
     public static final MenuToWithDishes MENU2_TO_WITH_DISHES_RESTAURANT1 = new MenuToWithDishes(
             MENU2_RESTAURANT1.getId(),
             MENU2_RESTAURANT1.getDate(),
             MENU2_RESTAURANT1.getRestaurant(),
-            MENU2_RESTAURANT1.getDishes(),
-            1,
-            true,
-            365000
+            MENU2_RESTAURANT1.getDishes()
     );
 
     public static final MenuToWithDishes MENU2_TO_WITH_DISHES_RESTAURANT2 = new MenuToWithDishes(
             MENU2_RESTAURANT2.getId(),
             MENU2_RESTAURANT2.getDate(),
             MENU2_RESTAURANT2.getRestaurant(),
-            MENU2_RESTAURANT2.getDishes(),
-            1,
-            false,
-            334000
+            MENU2_RESTAURANT2.getDishes()
     );
 
     public static Menu getCreated() {

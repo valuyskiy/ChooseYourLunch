@@ -2,7 +2,6 @@ package ru.valuyskiy.chooseyourlunch.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import ru.valuyskiy.chooseyourlunch.model.Dish;
@@ -26,7 +25,7 @@ public class DishServiceImpl implements DishService {
     @Autowired
     MenuRepository menuRepository;
 
-    @CacheEvict(value = "dishes", allEntries = true)
+    @CacheEvict(value = "menus", allEntries = true)
     @Override
     public Dish create(Dish dish) {
         Assert.notNull(dish, "Dish must not be null");
@@ -39,26 +38,24 @@ public class DishServiceImpl implements DishService {
         return checkNotFoundWithId(dishRepository.findById(id).orElse(null), id);
     }
 
-    @Cacheable("dishes")
     @Override
     public List<Dish> getAll() {
         return dishRepository.findAll();
     }
 
-    @CacheEvict(value = "dishes", allEntries = true)
+    @CacheEvict(value = "menus", allEntries = true)
     @Override
     public Dish update(Dish dish) {
         Assert.notNull(dish, "Dish must not be null");
         return checkNotFoundWithId(dishRepository.save(dish), dish.getId());
     }
 
-    @CacheEvict(value = "dishes", allEntries = true)
+    @CacheEvict(value = "menus", allEntries = true)
     @Override
     public void delete(int id) throws NotFoundException {
         checkNotFoundWithId(dishRepository.delete(id) != 0, id);
     }
 
-    @Cacheable("dishes")
     @Override
     public List<DishTo> getToByMenuId(int menuId) {
         return dishRepository.getByMenu_Id(menuId).stream()

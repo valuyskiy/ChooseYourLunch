@@ -1,8 +1,6 @@
 package ru.valuyskiy.chooseyourlunch.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,17 +10,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import ru.valuyskiy.chooseyourlunch.AuthorizedUser;
-import ru.valuyskiy.chooseyourlunch.model.AbstractBaseEntity;
 import ru.valuyskiy.chooseyourlunch.model.User;
 import ru.valuyskiy.chooseyourlunch.repository.UserRepository;
-import ru.valuyskiy.chooseyourlunch.util.exception.ModificationRestrictionException;
 import ru.valuyskiy.chooseyourlunch.util.exception.NotFoundException;
 
 import java.util.List;
 
-import static ru.valuyskiy.chooseyourlunch.util.ValidationUtil.checkNew;
-import static ru.valuyskiy.chooseyourlunch.util.ValidationUtil.checkNotFound;
-import static ru.valuyskiy.chooseyourlunch.util.ValidationUtil.checkNotFoundWithId;
+import static ru.valuyskiy.chooseyourlunch.util.ValidationUtil.*;
 
 @Service("userService")
 public class UserServiceImpl implements AbstractCrudService<User>, UserService, UserDetailsService {
@@ -38,7 +32,6 @@ public class UserServiceImpl implements AbstractCrudService<User>, UserService, 
         this.passwordEncoder = passwordEncoder;
     }
 
-    @CacheEvict(value = "users", allEntries = true)
     @Override
     public User create(User user) {
         Assert.notNull(user, "User must not be null");
@@ -51,25 +44,20 @@ public class UserServiceImpl implements AbstractCrudService<User>, UserService, 
         return checkNotFoundWithId(repository.findById(id).orElse(null), id);
     }
 
-    @Cacheable("users")
     @Override
     public List<User> getAll() {
         return repository.findAll(SORT_NAME_EMAIL);
     }
 
-    @CacheEvict(value = "users", allEntries = true)
     @Override
     public User update(User user) {
         Assert.notNull(user, "User must not be null");
-        checkModificationAllowed(user.getId());
         return checkNotFoundWithId(repository.save(prepareToSave(user, passwordEncoder)), user.getId());
     }
 
-    @CacheEvict(value = "users", allEntries = true)
     @Override
     public User updateUserProfile(User user) {
         Assert.notNull(user, "User must not be null");
-        checkModificationAllowed(user.getId());
 
         User oldUser = get(user.getId());
         user.setRoles(oldUser.getRoles());      // block change roles
@@ -77,10 +65,8 @@ public class UserServiceImpl implements AbstractCrudService<User>, UserService, 
         return checkNotFoundWithId(repository.save(prepareToSave(user, passwordEncoder)), user.getId());
     }
 
-    @CacheEvict(value = "users", allEntries = true)
     @Override
     public void delete(int id) {
-        checkModificationAllowed(id);
         checkNotFoundWithId(repository.delete(id) != 0, id);
     }
 
@@ -104,11 +90,5 @@ public class UserServiceImpl implements AbstractCrudService<User>, UserService, 
         user.setPassword(StringUtils.isEmpty(password) ? password : passwordEncoder.encode(password));
         user.setEmail(user.getEmail().toLowerCase());
         return user;
-    }
-
-    private void checkModificationAllowed(int id) {
-        if (id == AbstractBaseEntity.START_SEQ) {
-            throw new ModificationRestrictionException("Admin modification is forbidden");
-        }
     }
 }

@@ -5,11 +5,9 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.valuyskiy.chooseyourlunch.model.Dish;
 import ru.valuyskiy.chooseyourlunch.model.Menu;
 import ru.valuyskiy.chooseyourlunch.repository.MenuRepository;
 import ru.valuyskiy.chooseyourlunch.repository.RestaurantRepository;
-import ru.valuyskiy.chooseyourlunch.repository.VoteRepository;
 import ru.valuyskiy.chooseyourlunch.to.MenuTo;
 import ru.valuyskiy.chooseyourlunch.to.MenuToWithDishes;
 import ru.valuyskiy.chooseyourlunch.util.exception.NotFoundException;
@@ -27,9 +25,6 @@ public class MenuServiceImpl implements MenuService {
 
     @Autowired
     MenuRepository menuRepository;
-
-    @Autowired
-    VoteRepository voteRepository;
 
     @Autowired
     RestaurantRepository restaurantRepository;
@@ -56,7 +51,6 @@ public class MenuServiceImpl implements MenuService {
         return checkNotFoundWithId(menuRepository.findById(id).orElse(null), id);
     }
 
-    @Cacheable("menus")
     @Override
     public List<Menu> getAll() {
         return menuRepository.findAll();
@@ -75,7 +69,6 @@ public class MenuServiceImpl implements MenuService {
         checkNotFoundWithId(menuRepository.delete(id) != 0, id);
     }
 
-    @Cacheable("menus")
     @Override
     public List<MenuTo> getToByRestaurantId(int restaurantId) {
         return menuRepository.getByRestaurant(restaurantId).stream()
@@ -89,36 +82,20 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Transactional
+    @Cacheable(cacheNames = "menus", key = "#date")
     @Override
-    public List<MenuToWithDishes> getToWithDishes(LocalDate date, int userId) {
+    public List<MenuToWithDishes> getToWithDishes(LocalDate date) {
         if (date == null) {
             date = LocalDate.now();
         }
         return menuRepository.getWithDishesByDate(date).stream()
-                .map(menu -> getToWithDishes(menu, userId))
+                .map(menu -> new MenuToWithDishes(
+                        menu.getId(),
+                        menu.getDate(),
+                        menu.getRestaurant(),
+                        menu.getDishes())
+                )
                 .collect(toList());
-    }
-
-    @Transactional
-    @Override
-    public MenuToWithDishes getToWithDishes(Menu menu, int userId) {
-
-        int totalPrice = menu.getDishes().stream()
-                .mapToInt(Dish::getPrice)
-                .sum();
-
-        int voteCounter = voteRepository.countByMenu_Id(menu.getId());
-
-        boolean isVoting = voteRepository.countByUser_IdAndMenu_Id(userId, menu.getId()) > 0;
-
-        return new MenuToWithDishes(
-                menu.getId(),
-                menu.getDate(),
-                menu.getRestaurant(),
-                menu.getDishes(),
-                voteCounter,
-                isVoting,
-                totalPrice);
     }
 
     @CacheEvict(value = "menus", allEntries = true)

@@ -11,23 +11,15 @@ public class MenuToWithDishes extends AbstractTo {
     private Restaurant restaurant;
     private List<Dish> dishes;
 
-    private int voteCounter;
-    private boolean isVoting;
-
-    private int totalPrice;
-
-    public MenuToWithDishes(){
+    public MenuToWithDishes() {
 
     }
 
-    public MenuToWithDishes(Integer id, LocalDate date, Restaurant restaurant, List<Dish> dishes, int voteCounter, boolean isVoting, int totalPrice) {
+    public MenuToWithDishes(Integer id, LocalDate date, Restaurant restaurant, List<Dish> dishes) {
         super(id);
         this.date = date;
         this.restaurant = restaurant;
         this.dishes = dishes;
-        this.voteCounter = voteCounter;
-        this.isVoting = isVoting;
-        this.totalPrice = totalPrice;
     }
 
     public LocalDate getDate() {
@@ -52,29 +44,5 @@ public class MenuToWithDishes extends AbstractTo {
 
     public void setDishes(List<Dish> dishes) {
         this.dishes = dishes;
-    }
-
-    public int getVoteCounter() {
-        return voteCounter;
-    }
-
-    public void setVoteCounter(int voteCounter) {
-        this.voteCounter = voteCounter;
-    }
-
-    public boolean isVoting() {
-        return isVoting;
-    }
-
-    public void setVoting(boolean voting) {
-        isVoting = voting;
-    }
-
-    public int getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(int totalPrice) {
-        this.totalPrice = totalPrice;
     }
 }
