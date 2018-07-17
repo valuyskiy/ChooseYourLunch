@@ -856,7 +856,7 @@
  `PUT  http://{your.host:port}/rest/user/menus/{MenuId}/votes`
  
      curl -X PUT \
-         http://localhost:8080/rest/user/menus/100009/votes \
+         http://localhost:8080/rest/user/menus/100031/votes \
          -H 'Authorization: Basic dXNlckBnb29nbGUucnU6dXNlclBhc3N3b3Jk'
    
  Response: 
@@ -869,3 +869,28 @@
         401 - Unauthorized
         403 - Forbidden
         422 - Vote is rejected
+        
+#### Voting statistics 
+
+**Get voting statistics for day**
+
+ `GET  http://{your.host:port}/rest/user/menus/stats?date={YYYY-MM-DD}`
+ 
+     curl -X GET \
+       'http://localhost:8080/rest/user/menus/stats?date=2018-05-20' \
+       -H 'Authorization: Basic dXNlckBnb29nbGUucnU6dXNlclBhc3N3b3Jk' 
+
+ Response: 
+ 
+     Content-Type: application/json;charset=UTF-8
+     
+     [
+         {
+             "votes": 55,
+             "menu_id": 100026
+         },
+         {
+             "votes": 32,
+             "menu_id": 100031
+         }
+     ]

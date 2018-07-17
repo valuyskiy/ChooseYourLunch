@@ -9,6 +9,7 @@ import ru.valuyskiy.chooseyourlunch.model.Vote;
 import ru.valuyskiy.chooseyourlunch.repository.MenuRepository;
 import ru.valuyskiy.chooseyourlunch.repository.UserRepository;
 import ru.valuyskiy.chooseyourlunch.repository.VoteRepository;
+import ru.valuyskiy.chooseyourlunch.to.VotingStatisticsTo;
 import ru.valuyskiy.chooseyourlunch.util.TimeMachine;
 import ru.valuyskiy.chooseyourlunch.util.exception.NotFoundException;
 
@@ -77,5 +78,13 @@ public class VotingServiceImpl implements VotingService {
             }
         }
         return null;
+    }
+
+    @Override
+    public List<VotingStatisticsTo> getVotingStatistics(LocalDate date) {
+        if (date == null) {
+            date = LocalDate.now();
+        }
+        return voteRepository.getVotingStatistics(date);
     }
 }

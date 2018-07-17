@@ -6,8 +6,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import ru.valuyskiy.chooseyourlunch.model.Vote;
+import ru.valuyskiy.chooseyourlunch.to.VotingStatisticsTo;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Transactional(readOnly = true)
 public interface VoteRepository extends JpaRepository<Vote, Integer> {
@@ -24,4 +26,7 @@ public interface VoteRepository extends JpaRepository<Vote, Integer> {
     @Query(value = "INSERT INTO voting (user_id, date, menu_id) VALUES " +
             "(?1, ?2, ?3)", nativeQuery = true)
     int create(int userId, LocalDate date, int menuId);
+
+    @Query("SELECT new ru.valuyskiy.chooseyourlunch.to.VotingStatisticsTo(v.menu.id, count(v.id)) from Vote v WHERE v.date = ?1 GROUP BY v.menu.id")
+    List<VotingStatisticsTo> getVotingStatistics(LocalDate date);
 }

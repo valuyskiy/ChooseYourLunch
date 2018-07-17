@@ -11,6 +11,7 @@ import ru.valuyskiy.chooseyourlunch.AuthorizedUser;
 import ru.valuyskiy.chooseyourlunch.service.MenuService;
 import ru.valuyskiy.chooseyourlunch.service.VotingService;
 import ru.valuyskiy.chooseyourlunch.to.MenuToWithDishes;
+import ru.valuyskiy.chooseyourlunch.to.VotingStatisticsTo;
 import ru.valuyskiy.chooseyourlunch.web.admin.UsersAdminRestController;
 
 import java.time.LocalDate;
@@ -37,6 +38,17 @@ public class UserRestController {
 
         log.info("Get all Menus for date {} by user id={}", date, AuthorizedUser.id());
         return menuService.getToWithDishes(date);
+    }
+
+    @GetMapping(value = "/menus/stats")
+    public List<VotingStatisticsTo> getVotingStatistics(@RequestParam(value = "date", required = false)
+                                                        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        if (date == null) {
+            date = LocalDate.now();
+        }
+
+        log.info("Get voting statistics for date {} by user id={}", date, AuthorizedUser.id());
+        return votingService.getVotingStatistics(date);
     }
 
     @PutMapping(value = "/menus/{id}/votes")
