@@ -20,8 +20,8 @@ import static ru.valuyskiy.chooseyourlunch.util.ValidationUtil.checkNotFoundWith
 @Service("voteService")
 public class VotingServiceImpl implements VotingService {
 
-    private static Clock clock;
-    private static ZoneId zoneId;
+    private Clock clock;
+    private ZoneId zoneId;
 
     @Autowired
     VoteRepository voteRepository;
