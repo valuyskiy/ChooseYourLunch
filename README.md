@@ -894,3 +894,9 @@
              "menu_id": 100031
          }
      ]
+     
+     Status codes:
+     
+       200 - Ok
+       401 - Unauthorized
+       403 - Forbidden

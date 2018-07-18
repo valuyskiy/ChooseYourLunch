@@ -10,7 +10,6 @@ import ru.valuyskiy.chooseyourlunch.model.Restaurant;
 import ru.valuyskiy.chooseyourlunch.service.RestaurantService;
 import ru.valuyskiy.chooseyourlunch.util.exception.ErrorType;
 import ru.valuyskiy.chooseyourlunch.web.AbstractControllerTest;
-import ru.valuyskiy.chooseyourlunch.web.json.JsonUtil;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
